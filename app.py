@@ -31,7 +31,7 @@ toggle = 0  # Define toggle as a global variable outside the function
 # app name
 @app.errorhandler(404)
 def not_found(e):
-    genre_data = read_genre_data(f"{homedir_path}/config.csv")
+    genre_data = read_genre_data(f"{homedir_songs}/config.csv")
     genre_names = genre_data  # Use the genre_data dictionary directly
     genre_songs = {}  # Create an empty dictionary to store genre songs
 
@@ -74,14 +74,14 @@ def setup():
     if request.method == 'POST':
         selected_input = request.form.get('input')
         selected_output = request.form.get('output')
-        homedir_path = request.form.get('homedir_path')
-        write_params(selected_input, selected_output, homedir_path)
+        homedir_songs = request.form.get('homedir_songs')
+        write_params(selected_input, selected_output, homedir_songs)
         return 'Params file created successfully!'
     
     return render_template('index.html', inputs=inz, outputs=outz)
 
-def write_params(selected_input, selected_output, homedir_path):
-    params_code = f"import mido\nport_name = '{selected_input}'\noutport = '{selected_output}'\nhomedir_path = r'{homedir_path}'"
+def write_params(selected_input, selected_output, homedir_songs):
+    params_code = f"import mido\nport_name = '{selected_input}'\noutport = '{selected_output}'\nhomedir_songs = r'{homedir_songs}'"
     with open('params.py', 'w') as file:
         file.write(params_code)
 
@@ -93,7 +93,7 @@ def get_songs():
     genre_folder = request.json.get("genreCode")
     genre_songs = []
 
-    genre_config_path = f"{homedir_path}/{genre_folder}/config.csv"
+    genre_config_path = f"{homedir_songs}/{genre_folder}/config.csv"
     with open(genre_config_path, newline="") as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
@@ -105,7 +105,7 @@ def get_songs():
 @app.route("/")
 def index():
     global current_tempo
-    genre_data = read_genre_data(f"{homedir_path}/config.csv")
+    genre_data = read_genre_data(f"{homedir_songs}/config.csv")
     genre_names = genre_data  # Use the genre_data dictionary directly
     genre_songs = {}  # Create an empty dictionary to store genre songs
 
@@ -121,7 +121,7 @@ def index():
 @app.route("/select_song", methods=["POST"])
 def select_song():
     genre_name = request.form["genre"]
-    genre_data = read_genre_data(f"{homedir_path}/config.csv")
+    genre_data = read_genre_data(f"{homedir_songs}/config.csv")
     genre_code = None
     for code, name in genre_data.items():
         if name.strip() == genre_name:
@@ -129,7 +129,7 @@ def select_song():
             break
     if genre_code is None:
         return "Genre code not found."
-    genre_config_path = f"{homedir_path}/{genre_code}/config.csv"
+    genre_config_path = f"{homedir_songs}/{genre_code}/config.csv"
     song_names = read_song_names(genre_config_path)
     return render_template("select_song.html", genre=genre_name, song_names=song_names)
 
@@ -138,7 +138,7 @@ def select_song():
 # def display_results():
 # genre = request.form["genre"]
 # song = request.form["song"]
-# genre_data = read_genre_data(f"{homedir_path}/config.csv")
+# genre_data = read_genre_data(f"{homedir_songs}/config.csv")
 # return render_template(
 # "results.html", genre=genre, song=song, genre_data=genre_data
 # )
@@ -197,7 +197,7 @@ def send_to_bb():
 
 def magic():
     global current_tempo
-    genre_data = read_genre_data(f"{homedir_path}/config.csv")
+    genre_data = read_genre_data(f"{homedir_songs}/config.csv")
     genre_names = genre_data  # Use the genre_data dictionary directly
     genre_songs = {}  # Create an empty dictionary to store genre songs
     return render_template(
@@ -302,13 +302,13 @@ def adjust_tempo():
 def search_songs(query):
     results = []
 
-    with open(os.path.join(homedir_path, "config.csv"), "r") as csvfile:
+    with open(os.path.join(homedir_songs, "config.csv"), "r") as csvfile:
         reader = csv.reader(csvfile)
 
         for row in reader:
             genre_code = row[0]
             genre_name = row[1]
-            genre_folder_path = os.path.join(homedir_path, genre_code)
+            genre_folder_path = os.path.join(homedir_songs, genre_code)
 
             if os.path.exists(genre_folder_path):
                 config_file_path = os.path.join(genre_folder_path, "config.csv")
