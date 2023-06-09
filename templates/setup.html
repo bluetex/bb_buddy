@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MIDI Interface Selection</title>
+</head>
+<body>
+    <h1>MIDI Interface Selection</h1>
+    <form method="POST" action="/">
+        <label for="input">Input:</label>
+        <select name="input" id="input">
+            {% for input in inputs %}
+                <option value="{{ input }}">{{ input }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <label for="output">Output:</label>
+        <select name="output" id="output">
+            {% for output in outputs %}
+                <option value="{{ output }}">{{ output }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <label for="homedir_path">Path to Collections SONGS directory:</label>
+        <input type="text" name="homedir_path" id="homedir_path" value="{{ homepath }}">
+        <br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

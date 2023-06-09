@@ -1,0 +1,5 @@
+beautifulsoup4==4.12.2
+Flask==2.3.2
+mido==1.2.10
+Requests==2.31.0
+python-rtmidi==1.4.9

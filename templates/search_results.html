@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Search Results</title>
+    <style>
+	a {
+		color: red;
+		text-decoration: none;
+	}
+    .header {
+        position: sticky;
+        top: 0;
+        background-color: #f1f1f1;
+        padding: 0px;
+        text-align: center;
+        z-index: 999;
+		font-size: 20px;
+    }
+      .accordion {
+          background-color: #f9f9f9;
+          color: #444;
+          cursor: pointer;
+          padding: 0px;
+          width: 100%;
+          border: none;
+          text-align: left;
+          outline: none;
+          font-size: 15px;
+          transition: 0.4s;
+          flex: 1;
+      }
+
+      .accordion.active {
+          background-color: #ccc;
+          color: #000;
+          padding: 0px;
+      }
+
+      .active,
+      .accordion:hover {
+          background-color: #ccc;
+      }
+
+      .panel {
+          padding: 0 10px;
+          display: none;
+          background-color: white;
+          overflow: hidden;
+      }
+      .button {
+          background-color: #f44336; /* red */
+          border: none;
+          color: white;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <span id="Collection Select"><a href="/">Collection</a></span> |
+      <span id="selectedGenreHeader"></span> |
+      <span id="selectedSongHeader"></span> |
+      <button
+        class="button"
+        id="sendToBBButton"
+        type="submit"
+        onclick="sendToBeatBuddy()"
+      >
+        Send to Beat Buddy
+      </button>
+      <div id="successMessage" style="display: none;">
+        Data sent to Beat Buddy successfully!
+      </div>
+    </div>
+
+    <h2>Please choose song for your search: "{{ query }}"</h2>
+    <div>
+      <form id="bbForm" action="/submit" method="POST">
+        {% for result in results %}
+        <button
+          class="accordion"
+          data-genre="{{ result.genre_name.split('.')[0].strip() }}"
+          data-song="{{ result.song_name.split('.')[0].strip() }}"
+          onclick="selectAccordion(this, event)"
+        >
+          {{ result.genre_name }} - {{ result.song_name }} {{result.bpm}} {{
+          result.beat }}
+        </button>
+
+        <div class="panel">
+          <input
+            type="hidden"
+            name="genre_number"
+            value="{{ result.genre_name.split('.')[0].strip() }}"
+          />
+          <input
+            type="hidden"
+            name="song_number"
+            value="{{ result.song_name.split('.')[0].strip() }}"
+          />
+        </div>
+        {% endfor %}
+      </form>
+    </div>
+
+    <script>
+          var accordions = document.getElementsByClassName("accordion");
+
+      function selectAccordion(accordion, event) {
+          console.log("search1 selectAccordion")
+          event.preventDefault(); // Prevent the default form submission behavior
+
+          var panels = document.getElementsByClassName("panel");
+          var genreInputs = document.getElementsByName("genre_number");
+          var songInputs = document.getElementsByName("song_number");
+
+          for (var i = 0; i < accordions.length; i++) {
+              if (accordions[i] !== accordion) {
+                  accordions[i].classList.remove("active");
+                  panels[i].style.display = "none";
+              } else {
+                  if (!accordion.classList.contains("active")) {
+                      accordion.classList.add("active");
+                      panels[i].style.display = "block";
+                      var accordionText = accordion.innerHTML.trim();
+                      var genreName = accordionText.match(/\. (.+) -/)[1].trim();
+                      var songName = accordionText.match(/- (\d+\.\s*(.+))/)[2].trim();
+                      songName = songName.split('-')[0]
+                      document.getElementById("selectedGenreHeader").textContent = genreName;
+                      document.getElementById("selectedSongHeader").textContent = songName;
+                      // Store the values in localStorage
+                      localStorage.setItem("currentGenre", genreName );
+                      localStorage.setItem("currentSong", songName );
+                  } else {
+                      accordion.classList.remove("active");
+                      panels[i].style.display = "none";
+                      document.getElementById("selectedGenreHeader").textContent = "";
+                      document.getElementById("selectedSongHeader").textContent = "";
+                  }
+              }
+          }
+      }
+
+
+      function sendToBeatBuddy() {
+          console.log("search1 sendToBeatBuddy")
+          var bpm = localStorage.getItem("bpm");
+          console.log("got bpm: " + bpm)
+          var activeAccordion = document.querySelector(".accordion.active");
+          var genreNumber = parseInt(activeAccordion.getAttribute("data-genre"));
+          var songNumber = parseInt(activeAccordion.getAttribute("data-song"));
+
+          var genreInput = document.createElement("input");
+          genreInput.setAttribute("type", "hidden");
+          genreInput.setAttribute("name", "genre_number");
+          genreInput.setAttribute("value", genreNumber);
+
+          var songInput = document.createElement("input");
+          songInput.setAttribute("type", "hidden");
+          songInput.setAttribute("name", "song_number");
+          songInput.setAttribute("value", songNumber);
+
+          var bpmInput = document.createElement("input");
+          bpmInput.setAttribute("type", "hidden");
+          bpmInput.setAttribute("name", "bpm");
+          bpmInput.setAttribute("value", bpm);
+
+          var form = document.getElementById("bbForm");
+          form.innerHTML = '';  // Clear existing inputs
+          form.appendChild(genreInput);
+          form.appendChild(songInput);
+          form.appendChild(bpmInput);
+
+
+          form.submit();
+      }
+
+          function setTempo() {
+              var newTempo = document.getElementById("new_tempo").value;
+                  // Send an AJAX POST request to the /set_tempo route
+              $.post("/set_tempo", { new_tempo: newTempo }, function(data) {
+                  document.getElementById("current_tempo").innerText = data;
+                  document.getElementById("new_tempo").value = "";
+                  document.getElementById("new_tempo").blur(); // Remove focus from the input field
+              });
+          }
+    </script>
+  </body>
+</html>

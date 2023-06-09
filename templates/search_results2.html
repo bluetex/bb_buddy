@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Search Results2</title>
+    <style>
+	a {
+		color: red;
+		text-decoration: none;
+	}
+    .header {
+        position: sticky;
+        top: 0;
+        background-color: #f1f1f1;
+        padding: 0px;
+        text-align: center;
+        z-index: 999;
+		font-size: 20px;
+    }
+
+      .accordion {
+          background-color: #f9f9f9;
+          color: #444;
+          cursor: pointer;
+          padding: 0px;
+          width: 100%;
+          border: none;
+          text-align: left;
+          outline: none;
+          font-size: 15px;
+          transition: 0.4s;
+          flex: 1;
+      }
+
+      .accordion.active {
+          background-color: #ccc;
+          color: #000;
+          padding: 0px;
+      }
+
+      .active,
+      .accordion:hover {
+          background-color: #ccc;
+      }
+
+      .panel {
+          padding: 0 10px;
+          display: none;
+          background-color: white;
+          overflow: hidden;
+      }
+      .button {
+          background-color: #f44336; /* red */
+          border: none;
+          color: white;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <span id="Collection Select"><a href="/">Collection</a></span> |
+      <span id="selectedGenreHeader"></span> |
+      <span id="selectedSongHeader"></span> |
+      <button
+        class="button"
+        id="sendToBBButton"
+        type="submit"
+        onclick="sendToBeatBuddy()"
+      >
+        Send to Beat Buddy
+      </button>
+      <div id="successMessage" style="display: none;">
+        Data sent to Beat Buddy successfully!
+      </div>
+    </div>
+
+    <h1>
+      <img src="/static/ss_logo.jpg" width="40px" />Song Matching Site Matches
+      for "{{ query }}"
+    </h1>
+    <div>
+      <form id="bbForm" method="POST">
+        {% for result in results %}
+        <button
+          type="button"
+          class="accordion"
+          data-beat="{{ result.beat }}"
+          data-bpm="{{ result.bpm }}"
+          onclick="searchByBeat(this, event)"
+        >
+          {{ result.genre_name }} - {{ result.song_name }} - {{ result.bpm }} -
+          {{ result.beat }}
+        </button>
+
+        <div class="panel">
+          <!-- Content inside the accordion panel -->
+		
+        </div>
+        {% endfor %}
+        <input type="hidden" id="queryInput" name="query" value="{{ query }}" />
+      </form>
+    </div>
+
+    <script>
+      function searchByBeat(button, event) {
+          console.log("searchByBeat");
+          event.preventDefault(); // Prevent the default button behavior
+          var beat = button.getAttribute("data-beat");
+          var bpm = button.getAttribute("data-bpm");
+          bpm = bpm.substring(0, bpm.length-3);
+          console.log(bpm);
+          var mybeat = beat.substring(beat.lastIndexOf(":") + 1).trim();
+          var searchUrl = "/search/query=" + encodeURIComponent(mybeat);
+          localStorage.setItem("bpm", bpm);
+
+          window.location.href = searchUrl;
+      }
+    </script>
+  </body>
+</html>

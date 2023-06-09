@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Search</title>
+
+    <style>
+	a {
+		color: red;
+		text-decoration: none;
+	}
+    .header {
+        position: sticky;
+        top: 0;
+        background-color: #f1f1f1;
+        padding: 0px;
+        text-align: center;
+        z-index: 999;
+		font-size: 20px;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <span id="Collection Select"><a href="/">Collection</a></span> |
+    </div>
+
+    <h1>Search for Songs</h1>
+    <form action="/search" method="POST">
+      <input type="text" name="query" placeholder="Enter your search query" />
+      <input type="submit" value="Search" />
+    </form>
+  </body>
+</html>
