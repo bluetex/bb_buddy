@@ -1,0 +1,232 @@
+  a {
+    color: red;
+    text-decoration: none;
+  }
+    hr.new2 {  border-top: 1px dashed red;
+    }
+    .header {
+        position: sticky;
+        top: 0;
+        background-color: #f1f1f1;
+        padding: 0px;
+        text-align: center;
+        z-index: 999;
+    font-size: 20px;
+    }
+	#midi-control-buttons {
+	  margin: 2px;
+	  position: fixed;
+	  right: 10px;
+	  height: 70%; 
+	  width: 48%;
+	  overflow-y: auto; /* Add scrollbar for vertical overflow */
+	}
+    #selectedSongAccordion {
+        right: -33px;
+        top: 133px;
+    }
+	#selected-song-container-id {
+		width: 50%;
+	}
+	.selected-song-container {
+		padding: 2px;
+	}
+    .accordion {
+        background-color: #f9f9f9;
+        color: #444;
+        cursor: pointer;
+        padding: 0px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        transition: 0.4s;
+        flex: 1;
+    }
+    .accordion.active {
+        background-color: #ccc;
+        color: #000;
+        padding: 0px;
+    }
+    .active {
+        background-color: #ccc;
+    }
+    .panel {
+        padding: 0 0px;
+        display: none;
+        background-color: black;
+        overflow-y: auto; /* Add scrollbar for vertical overflow */
+        max-height: 300px; /* Adjust the max-height to your preference */
+    }
+	
+	.remove-button {
+    display: none;
+    position: absolute;
+    /* top: 10px; */
+    /* right: 5px; */
+    transform: translateY(-83%);
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+	right: 50%;
+}
+
+    #setListPanel {
+      display: none;
+    }
+    .song-list {
+        list-style-type: none;
+        padding-left: 0px;
+        padding: 2px;
+        margin: 0;
+    }
+    .selected-song-accordion {
+        position: fixed;
+        top: 30px; /* Adjust the top position according to your header height */
+        right: 0;
+        width: 50%;
+        padding: 0;
+        overflow-y: auto; /* Add scrollbar for vertical overflow */
+        max-height: 800px; /* Adjust the max-height to your preference */
+        flex: 1;
+    }
+    .selected-song-accordion .accordion {
+        margin-bottom: 4px;
+    }
+    .song-accordion.active {
+        background-color: #ccc;
+    }
+    .button {
+        background-color: #f44336; /* red */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
+    .button-37 {
+        background-color: #13aa52;
+        border: 1px solid #13aa52;
+        border-radius: 4px;
+        box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+        box-sizing: border-box;
+        color: #fff;
+        cursor: pointer;
+        font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        outline: none;
+        outline: 0;
+        padding: 10px 25px;
+        text-align: center;
+        transform: translateY(0);
+        transition: transform 150ms, box-shadow 150ms;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+      .button-37:hover {
+        box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
+        transform: translateY(-2px);
+      }
+      @media (min-width: 768px) {
+        .button-37 {
+          padding: 10px 30px;
+        }
+      }
+    .button-yellow {
+        background-color: #FFFF33;
+        border: 1px solid #FFFF33;
+        border-radius: 4px;
+        box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+        box-sizing: border-box;
+        color: #000;
+        cursor: pointer;
+        font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        outline: none;
+        outline: 0;
+        padding: 10px 25px;
+        text-align: center;
+        transform: translateY(0);
+        transition: transform 150ms, box-shadow 150ms;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+      .button-yellow:hover {
+        box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
+        transform: translateY(-2px);
+      }
+      @media (min-width: 768px) {
+        .button-yellow {
+          padding: 10px 30px;
+        }
+      }
+    .button-blue {
+        background-color: #0000FF;
+        border: 1px solid #0000FF;
+        border-radius: 4px;
+        box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+        box-sizing: border-box;
+        color: #FFF;
+        cursor: pointer;
+        font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        outline: none;
+        outline: 0;
+        padding: 10px 25px;
+        text-align: center;
+        transform: translateY(0);
+        transition: transform 150ms, box-shadow 150ms;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+      .button-blue:hover {
+        box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
+        transform: translateY(-2px);
+      }
+      @media (min-width: 768px) {
+        .button-blue {
+          padding: 10px 30px;
+        }
+      }
+    .button-orange {
+        background-color: #FF8533;
+        border: 1px solid #FF8533;
+        border-radius: 4px;
+        box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+        box-sizing: border-box;
+        color: #000;
+        cursor: pointer;
+        font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        outline: none;
+        outline: 0;
+        padding: 10px 25px;
+        text-align: center;
+        transform: translateY(0);
+        transition: transform 150ms, box-shadow 150ms;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+      .button-orange:hover {
+        box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
+        transform: translateY(-2px);
+      }
+      @media (min-width: 768px) {
+        .button-orange {
+          padding: 10px 30px;
+        }
+      }
