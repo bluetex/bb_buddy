@@ -2,62 +2,9 @@
 <html>
   <head>
     <title>Search Results</title>
-    <style>
-	a {
-		color: red;
-		text-decoration: none;
-	}
-    .header {
-        position: sticky;
-        top: 0;
-        background-color: #f1f1f1;
-        padding: 0px;
-        text-align: center;
-        z-index: 999;
-		font-size: 20px;
-    }
-      .accordion {
-          background-color: #f9f9f9;
-          color: #444;
-          cursor: pointer;
-          padding: 0px;
-          width: 100%;
-          border: none;
-          text-align: left;
-          outline: none;
-          font-size: 15px;
-          transition: 0.4s;
-          flex: 1;
-      }
+   
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 
-      .accordion.active {
-          background-color: #ccc;
-          color: #000;
-          padding: 0px;
-      }
-
-      .active,
-      .accordion:hover {
-          background-color: #ccc;
-      }
-
-      .panel {
-          padding: 0 10px;
-          display: none;
-          background-color: white;
-          overflow: hidden;
-      }
-      .button {
-          background-color: #f44336; /* red */
-          border: none;
-          color: white;
-          padding: 15px 32px;
-          text-align: center;
-          text-decoration: none;
-          display: inline-block;
-          font-size: 16px;
-      }
-    </style>
   </head>
   <body>
     <div class="header">
@@ -75,7 +22,18 @@
       <div id="successMessage" style="display: none;">
         Data sent to Beat Buddy successfully!
       </div>
+    
+      <button class="button-blue" id="sendToSetlistButton" onclick="updateSetlist();">
+        Add to Setlist
+      </button>
+      <div id="setListAdded" style="display: none;">
+        Added to Setlist
+      </div>
     </div>
+
+    </div>
+
+
 
     <h2>Please choose song for your search: "{{ query }}"</h2>
     <div>
@@ -95,18 +53,19 @@
           <input
             type="hidden"
             name="genre_number"
-            value="{{ result.genre_name.split('.')[0].strip() }}"
+            value="{{ result.genre_name }}"
           />
           <input
             type="hidden"
             name="song_number"
-            value="{{ result.song_name.split('.')[0].strip() }}"
+            value="{{ result.song_name }}"
           />
         </div>
         {% endfor %}
       </form>
     </div>
-
+<script src="{{url_for('static', filename='allscript.js')}}"></script>
+<script src="{{url_for('static', filename='header.js')}}"></script>
     <script>
           var accordions = document.getElementsByClassName("accordion");
 
@@ -129,12 +88,16 @@
                       var accordionText = accordion.innerHTML.trim();
                       var genreName = accordionText.match(/\. (.+) -/)[1].trim();
                       var songName = accordionText.match(/- (\d+\.\s*(.+))/)[2].trim();
+                      var mygenre = accordionText.split('-')[0];
+                      var mysong = accordionText.split('-')[1];
+
                       songName = songName.split('-')[0]
-                      document.getElementById("selectedGenreHeader").textContent = genreName;
-                      document.getElementById("selectedSongHeader").textContent = songName;
+                      console.log("genre", mygenre, "song", mysong);
+                      document.getElementById("selectedGenreHeader").textContent = mygenre;
+                      document.getElementById("selectedSongHeader").textContent = mysong;
                       // Store the values in localStorage
-                      localStorage.setItem("currentGenre", genreName );
-                      localStorage.setItem("currentSong", songName );
+                      localStorage.setItem("currentGenre", mygenre );
+                      localStorage.setItem("currentSong", mysong );
                   } else {
                       accordion.classList.remove("active");
                       panels[i].style.display = "none";
@@ -188,6 +151,8 @@
                   document.getElementById("new_tempo").blur(); // Remove focus from the input field
               });
           }
-    </script>
+ </script>
+
+   
   </body>
 </html>

@@ -2,27 +2,22 @@
 <html>
   <head>
     <title>Search</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 
-    <style>
-	a {
-		color: red;
-		text-decoration: none;
-	}
-    .header {
-        position: sticky;
-        top: 0;
-        background-color: #f1f1f1;
-        padding: 0px;
-        text-align: center;
-        z-index: 999;
-		font-size: 20px;
-    }
-    </style>
   </head>
   <body>
-    <div class="header">
-      <span id="Collection Select"><a href="/">Collection</a></span> |
-    </div>
+     <div class="header">
+      <span id="Collection Select"><a href="/" color="red">Collection</a></span> |
+      <span id="selectedGenreHeader"></span> |
+      <span id="selectedSongHeader"></span> |
+    
+      <button class="button" id="sendToBBButton" onclick="sendToBeatBuddy()">
+        Send to Beat Buddy
+      </button>
+      <div id="successMessage" style="display: none;">
+        Data sent to Beat Buddy successfully!
+      </div>
+
 
     <h1>Search for Songs</h1>
     <form action="/search" method="POST">

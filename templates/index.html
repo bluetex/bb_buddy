@@ -2,237 +2,40 @@
 <html>
   <head>
     <title>BeatBuddy Collection</title>
-    <style>
-  a {
-    color: red;
-    text-decoration: none;
-  }
-    hr.new2 {  border-top: 1px dashed red;
-    }
-    .header {
-        position: sticky;
-        top: 0;
-        background-color: #f1f1f1;
-        padding: 0px;
-        text-align: center;
-        z-index: 999;
-    font-size: 20px;
-    }
-	#midi-control-buttons {
-	  margin: 2px;
-	  position: fixed;
-	  right: 10px;
-	  height: 70%; 
-	  width: 48%;
-	  overflow-y: auto; /* Add scrollbar for vertical overflow */
-	}
-    #selectedSongAccordion {
-        right: -33px;
-        top: 133px;
-    }
-    .accordion {
-        background-color: #f9f9f9;
-        color: #444;
-        cursor: pointer;
-        padding: 0px;
-        width: 100%;
-        border: none;
-        text-align: left;
-        outline: none;
-        font-size: 15px;
-        transition: 0.4s;
-        flex: 1;
-    }
-    .accordion.active {
-        background-color: #ccc;
-        color: #000;
-        padding: 0px;
-    }
-    .active {
-        background-color: #ccc;
-    }
-    .panel {
-        padding: 0 0px;
-        display: none;
-        background-color: black;
-        overflow-y: auto; /* Add scrollbar for vertical overflow */
-        max-height: 300px; /* Adjust the max-height to your preference */
-    }
-    .song-list {
-        list-style-type: none;
-        padding-left: 0px;
-        padding: 2px;
-        margin: 0;
-    }
-    .genre-songs-container {
-        margin-right: 50%;
-    }
-    .selected-song-accordion {
-        position: fixed;
-        top: 30px; /* Adjust the top position according to your header height */
-        right: 0;
-        width: 50%;
-        padding: 0;
-        overflow-y: auto; /* Add scrollbar for vertical overflow */
-        max-height: 800px; /* Adjust the max-height to your preference */
-        flex: 1;
-    }
-    .selected-song-accordion .accordion {
-        margin-bottom: 4px;
-    }
-    .song-accordion.active {
-        background-color: #ccc;
-    }
-    .button {
-        background-color: #f44336; /* red */
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-    }
-    .button-37 {
-        background-color: #13aa52;
-        border: 1px solid #13aa52;
-        border-radius: 4px;
-        box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
-        box-sizing: border-box;
-        color: #fff;
-        cursor: pointer;
-        font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
-        font-size: 16px;
-        font-weight: 400;
-        outline: none;
-        outline: 0;
-        padding: 10px 25px;
-        text-align: center;
-        transform: translateY(0);
-        transition: transform 150ms, box-shadow 150ms;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-      }
-      .button-37:hover {
-        box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
-        transform: translateY(-2px);
-      }
-      @media (min-width: 768px) {
-        .button-37 {
-          padding: 10px 30px;
-        }
-      }
-    .button-yellow {
-        background-color: #FFFF33;
-        border: 1px solid #FFFF33;
-        border-radius: 4px;
-        box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
-        box-sizing: border-box;
-        color: #000;
-        cursor: pointer;
-        font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
-        font-size: 16px;
-        font-weight: 400;
-        outline: none;
-        outline: 0;
-        padding: 10px 25px;
-        text-align: center;
-        transform: translateY(0);
-        transition: transform 150ms, box-shadow 150ms;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-      }
-      .button-yellow:hover {
-        box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
-        transform: translateY(-2px);
-      }
-      @media (min-width: 768px) {
-        .button-yellow {
-          padding: 10px 30px;
-        }
-      }
-    .button-blue {
-        background-color: #0000FF;
-        border: 1px solid #0000FF;
-        border-radius: 4px;
-        box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
-        box-sizing: border-box;
-        color: #FFF;
-        cursor: pointer;
-        font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
-        font-size: 16px;
-        font-weight: 400;
-        outline: none;
-        outline: 0;
-        padding: 10px 25px;
-        text-align: center;
-        transform: translateY(0);
-        transition: transform 150ms, box-shadow 150ms;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-      }
-      .button-blue:hover {
-        box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
-        transform: translateY(-2px);
-      }
-      @media (min-width: 768px) {
-        .button-blue {
-          padding: 10px 30px;
-        }
-      }
-    .button-orange {
-        background-color: #FF8533;
-        border: 1px solid #FF8533;
-        border-radius: 4px;
-        box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
-        box-sizing: border-box;
-        color: #000;
-        cursor: pointer;
-        font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
-        font-size: 16px;
-        font-weight: 400;
-        outline: none;
-        outline: 0;
-        padding: 10px 25px;
-        text-align: center;
-        transform: translateY(0);
-        transition: transform 150ms, box-shadow 150ms;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-      }
-      .button-orange:hover {
-        box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
-        transform: translateY(-2px);
-      }
-      @media (min-width: 768px) {
-        .button-orange {
-          padding: 10px 30px;
-        }
-      }
+  
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 
-</style>
 </head>
 <body style="padding-top: 0px;">
     <div class="header">
       <span id="Collection Select"><a href="/" color="red">Collection</a></span> |
       <span id="selectedGenreHeader"></span> |
       <span id="selectedSongHeader"></span> |
+	  
       <button class="button" id="sendToBBButton" onclick="sendToBeatBuddy()">
         Send to Beat Buddy
       </button>
       <div id="successMessage" style="display: none;">
         Data sent to Beat Buddy successfully!
       </div>
+
+      <button class="button-blue" id="sendToSetlistButton" onclick="updateSetlist();">
+        Add to Setlist
+      </button>
+      <div id="setListAdded" style="display: none;">
+        Added to Setlist
+      </div>
     </div>
 
     <h2>Beat Buddy Collection</h2>
     <hr class="new2" />
+	<div id="selected-song-container-id">
     <div class="selected-song-container">
-      <div class="genre-songs-container">
+	  <button id="toggleButton">Toggle Set List</button>
+		<div id="setListPanel">
+
+		</div>
+      <div class="genre-songs-container" id="genre-songs-container-id">
         {% for genre_code, genre_name in genre_names.items() %}
 
         <button
@@ -250,6 +53,7 @@
 
         {% endfor %}
       </div>
+	 </div>
 
       <div class="selected-song-accordion" id="selectedSongAccordion">
         <div>
@@ -351,347 +155,19 @@
         <input type="hidden" name="song" id="songInput" />
         <button type="submit">Send to Beat Buddy</button>
       </form>
+	  <form action="/" metho="POST" id="setlistForm">
+		<input type="hidden" name="genre" id="genreInput" />
+		<input type="hidden" name="song"  id="songInput" />
+		<button type="submit">Add to SetList</button>
+    </div>
     </div>
 
-    <script>
-      // Retrieve the values from localStorage
-      var value1 = localStorage.getItem("currentGenre");
-      var value2 = localStorage.getItem("currentSong");
-      localStorage.removeItem("bpm");
-
-      // Display the values on the page
-      document.getElementById("displayValue1").textContent = value1;
-      document.getElementById("displayValue2").textContent = value2;
-    </script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
-
-    <script>
-      $(document).ready(function() {
-          // Send MIDI command on button click
-          $('#start-button').click(function() {
-              sendMidiCommand('start');
-          });
-
-          $('#stop-button').click(function() {
-              sendMidiCommand('stop');
-          });
-
-          $('#pause-button').click(function() {
-              sendMidiCommand('pause');
-          });
-
-          $('#fill-button').click(function() {
-              sendMidiCommand('fill');
-          });
-
-          // Send MIDI command on button click
-          $('#half-button').click(function() {
-              sendMidiCommand('half');
-          });
-
-          $('#double-button').click(function() {
-              sendMidiCommand('double');
-          });
-
-          $('#previous-button').click(function() {
-              sendMidiCommand('previous');
-          });
-
-          $('#next-button').click(function() {
-              sendMidiCommand('next');
-          });
-
-
-          // Function to send MIDI command via AJAX
-          function sendMidiCommand(command) {
-              $.ajax({
-                  url: '/send_midi',
-                  method: 'POST',
-                  data: {command: command},
-                  success: function(response) {
-                      console.log(response);
-                  },
-                  error: function(xhr, status, error) {
-                      console.log(error);
-                  }
-              });
-          }
-      });
-    </script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-    <script>
-      function sendToBeatBuddy() {
-          // Retrieve the values from localStorage
-          var genre = document.getElementById("selectedGenreHeader").textContent;
-          var song = document.getElementById("selectedSongHeader").textContent;
-
-          var form = document.createElement("form");
-          form.setAttribute("method", "POST");
-          form.setAttribute("action", "/send_to_bb");
-
-          var genreInput = document.createElement("input");
-          genreInput.setAttribute("type", "hidden");
-          genreInput.setAttribute("name", "genre");
-          genreInput.setAttribute("value", genre);
-
-          var songInput = document.createElement("input");
-          songInput.setAttribute("type", "hidden");
-          songInput.setAttribute("name", "song");
-          songInput.setAttribute("value", song);
-
-          form.appendChild(genreInput);
-          form.appendChild(songInput);
-
-          document.body.appendChild(form);
-
-          // Display the success message
-          var successMessage = document.getElementById("successMessage");
-          successMessage.style.display = "block";
-          // Store the values in localStorage
-          localStorage.setItem("currentGenre", genreInput.value);
-          localStorage.setItem("currentSong", songInput.value);
-
-          // Submit the form
-          form.submit();
-      }
-    </script>
-
-    <script>
-       function toggleGenre(genreButton) {
-      console.log("func toggleGenre");
-        // Get the currently active genre button
-        var activeButton = document.querySelector(".accordion.active");
-
-        // Remove the active class from the currently active genre button
-        if (activeButton) {
-          activeButton.classList.remove("active");
-          activeButton.nextElementSibling.style.display = "none";
-        }
-
-        // Toggle the active class for the clicked genre button
-        genreButton.classList.toggle("active");
-
-        // Toggle the display of the corresponding panel
-        var panel = genreButton.nextElementSibling;
-        if (genreButton.classList.contains("active")) {
-          panel.style.display = "block";
-
-          // Create accordion buttons for the selected songs
-          var genreCode = genreButton.dataset.genreCode;
-          createSongAccordions(panel, genreCode);
-        } else {
-          panel.style.display = "none";
-        }
-
-        // Update the selected genre and song in the header
-        var selectedGenre = genreButton.textContent;
-        var selectedSong = genreButton.nextElementSibling.querySelector(".active");
-        var selectedSongText = selectedSong ? selectedSong.textContent : "";
-        updateHeader(selectedGenre, selectedSongText);
-      }
-
-
-
-      function createSongAccordions(panel, genreCode) {
-    console.log("func createSongAccordions");
-        var selectedSongAccordion = document.getElementById("selectedSongAccordion");
-        selectedSongAccordion.innerHTML = ""; // Clear previous accordions
-
-        var genreConfigPath = `{{ homedir_path }}/${genreCode}/config.csv`;
-
-        fetch('/get_songs', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ genreCode: genreCode }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            data.forEach((song, index) => {
-              var button = document.createElement("button");
-              button.className = "accordion song-accordion";
-              button.textContent = song;
-
-              button.addEventListener("click", function () {
-                selectSong(this.textContent);
-
-                // Update the header with the selected genre and song
-                var selectedGenre = document.getElementById("selectedGenreHeader").textContent;
-                updateHeader(selectedGenre, this.textContent);
-              });
-
-              var songPanel = document.createElement("div");
-              songPanel.className = "panel";
-              songPanel.appendChild(document.createTextNode(song));
-
-              selectedSongAccordion.appendChild(button);
-              selectedSongAccordion.appendChild(songPanel);
-
-              // Select the first song by default
-              if (index + 1 === 1) {
-                button.classList.add("active");
-                selectSong(song);
-              }
-            });
-
-            selectedSongAccordion.style.display = "block";
-
-            // Add event listeners to the song accordions
-            var songAccordions = selectedSongAccordion.getElementsByClassName("song-accordion");
-            for (var j = 0; j < songAccordions.length; j++) {
-              songAccordions[j].addEventListener("click", function () {
-                var isActive = this.classList.toggle("active");
-               // closeOtherSongAccordions(this);
-
-                if (isActive) {
-                  // Retrieve the selected genre and song
-                  var selectedGenre = document.getElementById("selectedGenreHeader").textContent;
-                  var selectedSong = this.textContent;
-          console.log("func createSongAccordions.is active");
-                  // Update the header with the selected genre and song
-                  updateHeader(selectedGenre, selectedSong);
-                }
-              });
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      }
-
-      function selectSong(song) {
-        var activeSongButton = document.querySelector(".selected-song-accordion .song-accordion.active");
-        if (activeSongButton) {
-          activeSongButton.classList.remove("active");
-        }
-
-        var selectedSongButton = document.querySelector(`.selected-song-accordion .song-accordion[data-song="${song}"]`);
-        if (selectedSongButton) {
-          selectedSongButton.classList.add("active");
-        }
-
-        document.getElementById("selectedSongHeader").textContent = song;
-      }
-
-
-        function updateHeader(genre, song) {
-          document.getElementById("selectedGenreHeader").textContent = genre;
-          document.getElementById("selectedSongHeader").textContent = song;
-        }
-
-        document.getElementById("bbForm").addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          var genre = document.getElementById("selectedGenreHeader").textContent;
-          var song = document.getElementById("selectedSongHeader").textContent;
-
-          var genreInput = document.getElementById("genreInput");
-          genreInput.value = genre;
-
-          var songInput = document.getElementById("songInput");
-          songInput.value = song;
-
-          sendToBeatBuddy();
-        });
-    </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-              $(document).ready(function() {
-                  var inputActive = false; // Flag to track if the input field is active
-
-                  // Trigger setTempo() function on Enter/Return key press
-                  $(document).on("keydown", function(e) {
-                      if ( (e.keyCode === 13) && ($("#new_tempo").is(":focus")) ) {
-                          setTempo();
-                          e.preventDefault(); // Prevent the default behavior of Enter/Return key
-                      }
-                  });
-
-      var keydownCount = 0;
-      var isProcessingKeydown = false;
-      var idleDelay = 250; // Adjust this value as needed
-
-      // Trigger adjustTempo(-1) function on Down Arrow key press
-      $(document).on("keydown", function(e) {
-          if (e.keyCode === 40) {
-              if (!inputActive && !isProcessingKeydown) {
-                  adjustTempo(-1);
-                  e.preventDefault(); // Prevent the default behavior of Down Arrow key
-                  isProcessingKeydown = true;
-                  keydownCount++;
-                  setTimeout(commitKeydownValue, idleDelay);
-              }
-          }
-      });
-
-      // Trigger adjustTempo(1) function on Up Arrow key press
-      $(document).on("keydown", function(e) {
-          if (e.keyCode === 38) {
-              if (!inputActive && !isProcessingKeydown) {
-                  adjustTempo(1);
-                  e.preventDefault(); // Prevent the default behavior of Up Arrow key
-                  isProcessingKeydown = true;
-                  keydownCount++;
-                  setTimeout(commitKeydownValue, idleDelay);
-              }
-          }
-      });
-
-      function commitKeydownValue() {
-          // Do something with the keydownCount value
-          console.log("Keydown count:", keydownCount);
-          keydownCount = 0; // Reset the count
-          isProcessingKeydown = false; // Reset the flag
-      }
-
-                  // Set inputActive flag to true when the input field is focused
-                  $("#new_tempo").on("focus", function() {
-                      inputActive = true;
-                  });
-
-                  // Set inputActive flag to false when the input field loses focus
-                  $("#new_tempo").on("blur", function() {
-                      inputActive = false;
-                  });
-
-                  // Set focus back to the input field when a numeric key is pressed
-                  $(document).on("keypress", function(e) {
-                      if (isNumericKey(e.keyCode)) {
-                          $("#new_tempo").focus();
-                      }
-                      else {
-                        $("#search").focus();
-                      }
-                  });
-
-                  // Helper function to check if a key code corresponds to a numeric key
-                  function isNumericKey(keyCode) {
-                      return (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105);
-                  }
-              });
-
-              function setTempo() {
-                  var newTempo = document.getElementById("new_tempo").value;
-
-                  // Send an AJAX POST request to the /set_tempo route
-                  $.post("/set_tempo", { new_tempo: newTempo }, function(data) {
-                      document.getElementById("current_tempo").innerText = data;
-                      document.getElementById("new_tempo").value = "";
-                      document.getElementById("new_tempo").blur(); // Remove focus from the input field
-                  });
-              }
-
-              function adjustTempo(adjustment) {
-                  // Send an AJAX POST request to the /adjust_tempo route
-                  $.post("/adjust_tempo", { adjustment: adjustment }, function(data) {
-                      document.getElementById("current_tempo").innerText = data;
-                      document.getElementById("new_tempo").blur(); // Remove focus from the input field
-                  });
-              }
-    </script>
+<!-- Add the Bootstrap and jQuery libraries -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<script src="{{url_for('static', filename='allscript.js')}}"></script>
+<script src="{{url_for('static', filename='header.js')}}"></script>
   </body>
 </html>
