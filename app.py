@@ -102,12 +102,38 @@ def get_songs():
     return jsonify(genre_songs)
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
     global current_tempo
     genre_data = read_genre_data(f"{homedir_songs}/config.csv")
     genre_names = genre_data  # Use the genre_data dictionary directly
     genre_songs = {}  # Create an empty dictionary to store genre songs
+
+    drumset_csv = os.path.join(homedir_drumsets, 'config.csv')
+
+    if request.method == 'POST':
+        selected_drumset = request.form['drumset']
+
+        # Convert drumset name to a value between 1 and 127
+        with open(drumset_csv, 'r') as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip the header row
+            drumset_names = [row[1] for row in reader]
+            drumset_value = drumset_names.index(selected_drumset) + 2
+        print(drumset_value)
+
+        # Send the drumset value to the MIDI device
+        with mido.open_output(outport) as port:
+            message = mido.Message('control_change', control=116, value=drumset_value)
+            print('Received MIDI message:', request.form)
+            print('Sending MIDI message:', message)
+            port.send(message)
+        print('MIDI message sent')
+
+    with open(drumset_csv, 'r') as file:
+        reader = csv.reader(file)
+        next(reader)  # Skip the header row
+        drumset_names = [row[1] for row in reader]
 
     return render_template(
         "index.html",
@@ -115,7 +141,15 @@ def index():
         genre_names=genre_names,
         genre_songs=genre_songs,
         current_tempo=current_tempo,
+        drumset_names=drumset_names,
     )
+
+@app.route('/get_json')
+def get_json():
+    # Read the JSON file
+    with open('data.json') as file:
+        data = json.load(file)
+    return jsonify(data)
 
 
 @app.route("/select_song", methods=["POST"])

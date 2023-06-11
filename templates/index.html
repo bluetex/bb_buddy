@@ -15,15 +15,14 @@
       <button class="button" id="sendToBBButton" onclick="sendToBeatBuddy()">
         Send to Beat Buddy
       </button>
-      <div id="successMessage" style="display: none;">
-        Data sent to Beat Buddy successfully!
-      </div>
-
       <button class="button-blue" id="sendToSetlistButton" onclick="updateSetlist();">
         Add to Setlist
       </button>
+      <div id="successMessage" style="display: none;">
+        Song sent to Beat Buddy!
+      </div>
       <div id="setListAdded" style="display: none;">
-        Added to Setlist
+        Sent Song to Setlist!
       </div>
     </div>
 
@@ -31,10 +30,15 @@
     <hr class="new2" />
 	<div id="selected-song-container-id">
     <div class="selected-song-container">
-	  <button id="toggleButton">Toggle Set List</button>
-		<div id="setListPanel">
 
-		</div>
+
+	  <button id="toggleButton">Toggle Set List</button>
+	<div id="setListPanel">
+		<i>Once songs are played they're removed from the setlist.</i>
+   		</div>
+	</div>
+
+
       <div class="genre-songs-container" id="genre-songs-container-id">
         {% for genre_code, genre_name in genre_names.items() %}
 
@@ -59,7 +63,7 @@
         <div>
 
           <div id="midi-control-buttons">
-		    <h2>Song Controls</h2>
+		    <h3>Song Controls</h3>
             <hr class="new2" />
             <ul>
               Current Genre:
@@ -128,7 +132,7 @@
             <hr class="new2" />
             <div>
               <ul>
-                <h2>Search for Songs</h2>
+                <h3>Search for Songs</h3>
                 <form action="/search" method="POST">
                   <input
                     type="text"
@@ -139,6 +143,23 @@
                   <input type="submit" value="Search" />
                 </form>
               </ul>
+			  <ul>
+		        <h3>Select a Drumset:</h3>
+				<form method="post" action="/">
+					<select name="drumset">
+						<option value="">Select a new Drumset</option>
+						{% for name in drumset_names %}
+						<option value="{{ name }}">{{ name }}</option>
+						{% endfor %}
+					</select>
+					<input type="submit" value="Submit">
+				</form>
+			   </ul>
+			   <ul>
+					<h3>Setlist File Loader</h3>
+					   <input type="file" id="file-input" accept=".json"><p><p>
+						<button onclick="exportSetlist()">Export Setlist</button>
+				</ul>
             </div>
           </div>
         </div>
@@ -163,11 +184,65 @@
     </div>
 
 <!-- Add the Bootstrap and jQuery libraries -->
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
 <script src="{{url_for('static', filename='allscript.js')}}"></script>
 <script src="{{url_for('static', filename='header.js')}}"></script>
+ <script>
+        // Function to handle file selection and load the JSON file
+        function handleFileSelect(event) {
+            const file = event.target.files[0];  // Get the selected file
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const contents = e.target.result;  // Get the file contents
+
+                try {
+                    const data = JSON.parse(contents);  // Parse the JSON data
+                    localStorage.setItem('setlist', JSON.stringify(data));  // Store the JSON data in localStorage
+                    console.log('JSON file loaded and stored in localStorage.');
+
+                    alert('File uploaded successfully.'); // Show an alert to indicate successful upload
+
+                    location.reload(); // Reload the page to complete the import
+                } catch (error) {
+                    console.error('Error parsing JSON file:', error);
+                }
+            };
+
+            reader.readAsText(file);  // Read the file as text
+        }
+
+        // Function to handle exporting the setlist to a JSON file
+        function exportSetlist() {
+            const setlistData = localStorage.getItem('setlist'); // Get the setlist data from localStorage
+
+            if (setlistData) {
+                const jsonData = JSON.parse(setlistData);
+                const formattedData = JSON.stringify(jsonData, null, 2); // Format the JSON data with indentation
+
+                const blob = new Blob([formattedData], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+
+                a.href = url;
+                a.download = 'setlist.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                console.log('Setlist exported to JSON file.');
+            } else {
+                console.warn('No setlist data found in localStorage.');
+            }
+        }
+
+        // Add an event listener to the file input element
+        document.getElementById('file-input').addEventListener('change', handleFileSelect, false);
+    </script>
+
   </body>
 </html>

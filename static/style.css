@@ -17,7 +17,7 @@
 	  margin: 2px;
 	  position: fixed;
 	  right: 10px;
-	  height: 70%; 
+	  height: 80%; 
 	  width: 48%;
 	  overflow-y: auto; /* Add scrollbar for vertical overflow */
 	}
@@ -27,9 +27,10 @@
     }
 	#selected-song-container-id {
 		width: 50%;
+		padding: 8px;
 	}
 	.selected-song-container {
-		padding: 2px;
+		padding: 8px;
 	}
     .accordion {
         background-color: #f9f9f9;

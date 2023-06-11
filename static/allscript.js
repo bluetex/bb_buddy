@@ -85,39 +85,31 @@ function displaySetlist() {
     });
   }
 
-    function createSetlistAccordions(setlist) {
-        // Get the setlist panel
-        var setlistPanel = document.getElementById("setListPanel");
+function createSetlistAccordions(setlist) {
+  // Get the setlist panel
+  var setlistPanel = document.getElementById("setListPanel");
 
-        // Clear the previous accordion buttons and panels
-        setlistPanel.innerHTML = "";
+  // Clear the previous setlist
+  setlistPanel.innerHTML = "";
 
-        // Create accordion buttons and panels for each setlist item
-        setlist.forEach(function(song, index) {
-            var accordion = document.createElement("button");
-            accordion.classList.add("accordion");
-            accordion.textContent = song.genre + " - " + song.song;
+  // Create a list for the current setlist
+  var setlistList = document.createElement("ul");
+  setlistList.classList.add("setlist-list");
 
-            var panel = document.createElement("div");
-            panel.classList.add("panel");
-            panel.textContent = song.genre + " - " + song.song;
+  // Populate the list with current setlist items
+  setlist.forEach(function (song) {
+    var listItem = document.createElement("li");
+    listItem.textContent = song.genre + " - " + song.song;
+    setlistList.appendChild(listItem);
+  });
 
-            setlistPanel.appendChild(accordion);
-            setlistPanel.appendChild(panel);
+  // Append the current setlist to the setlist panel
+  setlistPanel.appendChild(setlistList);
 
-            // Add click event listener to toggle panel visibility
-            accordion.addEventListener("click", function() {
-                this.classList.toggle("active");
-                panel.classList.toggle("show");
-            });
+}
 
-            // Select the first song by default
-            if (index === 0) {
-                accordion.classList.add("active");
-                panel.classList.add("show");
-            }
-        });
-    }
+
+
     function toggleGenre(genreButton) {
         console.log("func toggleGenre");
         // Get the currently active genre button
@@ -371,6 +363,7 @@ function displaySetlist() {
     toggleButton.addEventListener('click', function() {
         var setListPanel = document.getElementById('setListPanel');
         var songListPanel = document.getElementById("genre-songs-container-id");
+		var fileInput = document.getElementById("fileInput");
         if (setListPanel.style.display === 'none') {
             setListPanel.style.display = 'block';
             songListPanel.style.display = 'none';
