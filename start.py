@@ -26,7 +26,8 @@ def validate_params():
     return True
 
 def write_params(selected_input, selected_output, custom_homedir):
-    params_code = f"import mido\nport_name = '{selected_input}'\noutport = '{selected_output}'\nhomedir_base = r'{custom_homedir}'\nhomedir_songs = r'{custom_homedir}\\SONGS'\nhomedir_drumsets = r'{custom_homedir}\\DRUMSETS'"
+    custom_homedir = custom_homedir.replace('\\', '/')  # Replace backslashes with forward slashes
+    params_code = f"import mido\nport_name = '{selected_input}'\noutport = '{selected_output}'\nhomedir_base = r'{custom_homedir}'\nhomedir_songs = r'{custom_homedir}/SONGS'\nhomedir_drumsets = r'{custom_homedir}/DRUMSETS'"
     with open('params.py', 'w') as file:
         file.write(params_code)
 
