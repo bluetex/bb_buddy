@@ -1,7 +1,7 @@
     // Retrieve the values from localStorage
     var value1 = localStorage.getItem("currentGenre");
     var value2 = localStorage.getItem("currentSong");
-    localStorage.removeItem("bpm");
+    //localStorage.removeItem("bpm");
 
     // Display the values on the page
     document.getElementById("displayValue1").textContent = value1;

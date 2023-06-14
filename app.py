@@ -446,7 +446,7 @@ def submit():
         genre_number = request.form.get("genre_number")
         song_number = request.form.get("song_number")
         bpm = request.form.get("bpm")
-        # print("bpm in send to bb: " + bpm)
+        print("bpm in send to bb:", bpm)
 
         if not genre_number or not song_number:
             raise ValueError("Genre number or song number is missing.")
@@ -462,12 +462,13 @@ def submit():
             stderr=subprocess.STDOUT,
         )
         if bpm is not None:
+            print("bpm needs to be set for song")
             # Variables for tempo calculation
             clock_ticks = 0
             start_time = time.time()
 
             current_tempo = None if bpm == "null" else bpm
-            # print("current tempo is", current_tempo)
+            print("current tempo is", current_tempo, "bpm is", bpm)
             # Open the MIDI input
             if current_tempo is not None:
                 # print("tempo has a value of", current_tempo)
@@ -478,7 +479,7 @@ def submit():
                     nrpn_lsb = int(current_tempo) % 128
                     tempo_msb = nrpn_msb
                     tempo_lsb = nrpn_lsb
-                    # print("msb", tempo_msb, "lsb", tempo_lsb)
+                    print("msb", tempo_msb, "lsb", tempo_lsb)
                     port_out.send(
                         mido.Message("control_change", control=106, value=tempo_msb)
                     )
