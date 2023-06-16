@@ -73,6 +73,7 @@
               Current Song:
               <span id="displayValue2"></span>
             </ul>
+			<ul><div id="searchLabel"></div></ul>
             <hr class="new2" />
             <ul>
               <button id="start-button" class="button-37" role="button">
@@ -132,16 +133,18 @@
             <hr class="new2" />
             <div>
               <ul>
-                <h3>Search for Songs</h3>
-                <form action="/search" method="POST">
-                  <input
-                    type="text"
-                    id="search"
-                    name="query"
-                    placeholder="Enter your search query"
-                  />
-                  <input type="submit" value="Search" />
-                </form>
+				<h3>Search for Songs</h3>
+				<form action="/search" method="POST" onsubmit="saveSearch()">
+				  <input
+					type="text"
+					id="search"
+					name="query"
+					placeholder="Enter your search query"
+					oninput="updateSearchValue(this.value)"
+				  />
+				  <input type="submit" value="Search" />
+				</form>
+
               </ul>
 			  <ul>
 		        <h3>Select a Drumset:</h3>
@@ -243,6 +246,16 @@
         // Add an event listener to the file input element
         document.getElementById('file-input').addEventListener('change', handleFileSelect, false);
     </script>
+<script>
+  // Retrieve the searchValue from localStorage
+  var searchValue = localStorage.getItem('searchValue');
 
-  </body>
+  // Check if searchValue is empty
+  if (searchValue) {
+    var searchLabel = document.getElementById('searchLabel');
+    var currentUrl = window.location.href;
+    var url = currentUrl.replace(/\/$/, '') + '/chartsearch?query=' + encodeURIComponent(searchValue);
+    searchLabel.innerHTML = "Find a chart for '<a href='" + url + "' target='_blank'>" + searchValue + "</a>'";
+  }
+</script>  </body>
 </html>

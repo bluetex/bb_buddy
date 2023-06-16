@@ -496,3 +496,15 @@ function createSetlistAccordions(setlist) {
 
           window.location.href = searchUrl;
       }
+	  
+// Function to update the search value in localStorage
+function updateSearchValue(value) {
+  localStorage.setItem('searchValue', value);
+}
+
+// Function to save the search value to localStorage before form submission
+function saveSearch() {
+  var searchInput = document.getElementById('search');
+  updateSearchValue(searchInput.value);
+}
+
