@@ -21,7 +21,7 @@ this will open a webpage for configuration
   - Midi Interface Output
   - Home Directory of your beatbuddy collection (the folder on your computer will contain Songs, Drumsets etc, if you don't have one of these you'll use BB Manager to save your project locally on your compuer)
 2. click the submit and you'll be redirected to http://localhost:5000
-  - NOTE: if you don't allow access to ports on your computer, you may need to open both of these ports. 
+  - NOTE: if you don't allow access to ports on your computer, you may need to open both of these ports. It is possible to access the webpage via your computer's IP if you allow access from off your computer to a local webserver. 
 
 ## Features: 
 1. quick access view list (clickable) of all folders on your current sync to the beatbuddy sd card.  (works off the local pc side of that)
