@@ -1,6 +1,11 @@
 # bb_buddy
 #### BeatBuddy Buddy Application to push collection info to device.
 
+## Requirements: 
+1. BeatBuddy with Midi Cable
+2. Audio/Midi interface
+3. Python3 
+
 ## Install:
 1. Download the zip file under tags/releases
 2. Unzip it to your computer
