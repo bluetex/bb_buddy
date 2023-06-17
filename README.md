@@ -19,7 +19,7 @@ this will open a webpage for configuration
 1. on the config page (http://localhost:8000/) you'll be prompted for 3 values. 
   - Midi Interface Input 
   - Midi Interface Output
-  - Home Directory of your beatbuddy collection (the folder will contain Songs, Drumsets etc)
+  - Home Directory of your beatbuddy collection (the folder on your computer will contain Songs, Drumsets etc, if you don't have one of these you'll use BB Manager to save your project locally on your compuer)
 2. click the submit and you'll be redirected to http://localhost:5000
   - NOTE: if you don't allow access to ports on your computer, you may need to open both of these ports. 
 
