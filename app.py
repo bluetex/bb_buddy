@@ -298,7 +298,7 @@ def set_tempo():
 @app.route("/adjust_tempo", methods=["POST"])
 def adjust_tempo():
     global current_tempo, nrpn_msb, nrpn_lsb, tempo_msb, tempo_lsb, outport
-    #print("adjust_tempo route. Current tempo is ", current_tempo)
+    print("adjust_tempo route. Current tempo is ", current_tempo)
     adjustment = int(request.form["adjustment"])
 
     output = mido.open_output(outport)

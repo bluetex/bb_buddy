@@ -324,13 +324,13 @@ function createSetlistAccordions(setlist) {
         });
 
         // Set focus back to the input field when a numeric key is pressed
-        $(document).on("keypress", function(e) {
+/*         $(document).on("keypress", function(e) {
             if (isNumericKey(e.keyCode)) {
                 $("#new_tempo").focus();
             } else {
                 $("#search").focus();
             }
-        });
+        }); */
 
         // Helper function to check if a key code corresponds to a numeric key
         function isNumericKey(keyCode) {
@@ -347,7 +347,7 @@ function createSetlistAccordions(setlist) {
         }, function(data) {
             document.getElementById("current_tempo").innerText = data;
             document.getElementById("new_tempo").value = "";
-            // document.getElementById("new_tempo").blur(); // Remove focus from the input field
+            document.getElementById("new_tempo").blur(); // Remove focus from the input field
         });
     }
 
