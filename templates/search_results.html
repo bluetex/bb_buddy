@@ -147,7 +147,7 @@
               $.post("/set_tempo", { new_tempo: newTempo }, function(data) {
                   document.getElementById("current_tempo").innerText = data;
                   document.getElementById("new_tempo").value = "";
-                  document.getElementById("new_tempo").blur(); // Remove focus from the input field
+                  //document.getElementById("new_tempo").blur(); // Remove focus from the input field
               });
           }
  </script>

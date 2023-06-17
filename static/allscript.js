@@ -1,3 +1,5 @@
+
+
     // Retrieve the values from localStorage
     var value1 = localStorage.getItem("currentGenre");
     var value2 = localStorage.getItem("currentSong");
@@ -345,7 +347,7 @@ function createSetlistAccordions(setlist) {
         }, function(data) {
             document.getElementById("current_tempo").innerText = data;
             document.getElementById("new_tempo").value = "";
-            document.getElementById("new_tempo").blur(); // Remove focus from the input field
+            // document.getElementById("new_tempo").blur(); // Remove focus from the input field
         });
     }
 
@@ -355,11 +357,27 @@ function createSetlistAccordions(setlist) {
             adjustment: adjustment
         }, function(data) {
             document.getElementById("current_tempo").innerText = data;
-            document.getElementById("new_tempo").blur(); // Remove focus from the input field
+            // document.getElementById("new_tempo").blur(); // Remove focus from the input field
         });
     }
-    // Add click event listener to the toggle button
-    var toggleButton = document.getElementById('toggleButton');
+    
+	document.addEventListener('DOMContentLoaded', function() {
+	  // Check the value of 'setlist' in localStorage
+	  const setlistValue = localStorage.getItem('setlist');
+
+	  // Get a reference to the button element
+	  const toggleButton = document.getElementById('toggleButton');
+
+	  // Parse the 'setlist' value as an array and check its length
+	  const setlistArray = JSON.parse(setlistValue);
+	  if (setlistArray && setlistArray.length > 0) {
+		// 'setlist' is not empty, show the button
+		toggleButton.style.display = 'block';
+	  } else {
+		// 'setlist' is empty, hide the button
+		toggleButton.style.display = 'none';
+	  }
+	});	
     toggleButton.addEventListener('click', function() {
         var setListPanel = document.getElementById('setListPanel');
         var songListPanel = document.getElementById("genre-songs-container-id");
