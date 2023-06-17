@@ -28,7 +28,7 @@
   // Store the values in localStorage
 	localStorage.setItem("currentGenre", genreInput.value);
 	localStorage.setItem("currentSong", songInput.value);
-
+	localStorage.removeItem("searchValue");
   // Move value from "setlist" to "past"
   var setlist = JSON.parse(localStorage.getItem("setlist"));
   var past = JSON.parse(localStorage.getItem("past")) || [];
@@ -47,6 +47,7 @@
     // Update the modified arrays in localStorage
     localStorage.setItem("setlist", JSON.stringify(setlist));
     localStorage.setItem("past", JSON.stringify(past));
+	
   }
 
   // Submit the form

@@ -14,7 +14,7 @@
     font-size: 20px;
     }
 	#toggleButton {
-		display: block;
+		display: none;
 	}
 	#midi-control-buttons {
 	  margin: 2px;
