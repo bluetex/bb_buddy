@@ -122,15 +122,15 @@ def index():
             next(reader)  # Skip the header row
             drumset_names = [row[1] for row in reader]
             drumset_value = drumset_names.index(selected_drumset) + 2
-        #print(drumset_value)
+        ## print(drumset_value)
 
         # Send the drumset value to the MIDI device
         with mido.open_output(outport) as port:
             message = mido.Message('control_change', control=116, value=drumset_value)
-            #print('Received MIDI message:', request.form)
-            #print('Sending MIDI message:', message)
+            ## print('Received MIDI message:', request.form)
+            ## print('Sending MIDI message:', message)
             port.send(message)
-        #print('MIDI message sent')
+        ## print('MIDI message sent')
 
     with open(drumset_csv, 'r') as file:
         reader = csv.reader(file)
@@ -185,7 +185,7 @@ def index():
 def send_to_bb():
     global current_tempo, port_name
 
-    #print("entering send_to_bb")
+    ## print("entering send_to_bb")
     genre = request.form["genre"]
     song = request.form["song"]
     if song:    
@@ -193,10 +193,18 @@ def send_to_bb():
         song_number = song.split(".")[0].strip()
         genre_number = str(int(genre_number) - 1)
         song_number = str(int(song_number) - 1)
+        # print("genre", genre_number,"song", song_number)
+        cc0_val = 0
+        cc0_val = str(int(cc0_val))
+        if int(genre_number) > 127:
+            cc0_val = 1
+            cc0_val = str(int(cc0_val))
+            genre_number = str(int(genre_number) - 128)
+        # print("send to bb midi values", cc0_val, genre_number, song_number)        
 
         try:
             output = subprocess.check_output(
-                ["python", "set_bb.py", "0", genre_number, song_number],
+                ["python", "set_bb.py", cc0_val, genre_number, song_number],
                 stderr=subprocess.STDOUT,
             )
 
@@ -220,7 +228,7 @@ def send_to_bb():
                             # Read tempo only if it has changed
                             if rounded_tempo != current_tempo:
                                 current_tempo = rounded_tempo
-                                # print(f"Tempo: {current_tempo} BPM")
+                                # # print(f"Tempo: {current_tempo} BPM")
                                 # Exit the loop after reading the tempo
                                 break
                             # Reset timing variables
@@ -229,7 +237,7 @@ def send_to_bb():
             magic()
             return redirect(url_for("index"))
         except subprocess.CalledProcessError as e:
-            # print("Error executing set_bb.py:", e.output)
+            # # print("Error executing set_bb.py:", e.output)
             return "Error sending data to Beat Buddy."
     return redirect(url_for("index"))    
 
@@ -249,17 +257,17 @@ def magic():
 
 # @app.route("/tempo_control")
 # def tempo_control():
-# # print("tempo_control route")
+# # # print("tempo_control route")
 # return render_template("tempo_control.html", current_tempo=current_tempo)
 
 
 @app.route("/set_tempo", methods=["POST"])
 def set_tempo():
-    #print("set_tempo route")
+    ## print("set_tempo route")
     global current_tempo, nrpn_msb, nrpn_lsb, tempo_msb, tempo_lsb, outport
 
     new_tempo = int(request.form["new_tempo"])
-    # print("new tempo", new_tempo)
+    # # print("new tempo", new_tempo)
     new_tempo = max(40, min(new_tempo, 300))
     if new_tempo < 40: 
         new_tempo = 40
@@ -290,7 +298,7 @@ def set_tempo():
             ["python", "fx_send.py", "--tempo", str(new_tempo)],
             stderr=subprocess.STDOUT,
         )
-        print(output)
+        # print(output)
 
     return str(current_tempo)  # Return the updated tempo
 
@@ -298,7 +306,7 @@ def set_tempo():
 @app.route("/adjust_tempo", methods=["POST"])
 def adjust_tempo():
     global current_tempo, nrpn_msb, nrpn_lsb, tempo_msb, tempo_lsb, outport
-    print("adjust_tempo route. Current tempo is ", current_tempo)
+    # print("adjust_tempo route. Current tempo is ", current_tempo)
     adjustment = int(request.form["adjustment"])
 
     output = mido.open_output(outport)
@@ -309,7 +317,7 @@ def adjust_tempo():
     try:
         # Apply the adjustment to the current tempo
         new_tempo = current_tempo + adjustment
-        #print("new tempo", new_tempo)
+        ## print("new tempo", new_tempo)
         # Ensure the new tempo is within the valid range
         new_tempo = max(40, min(new_tempo, 300))
         if new_tempo < 40: 
@@ -337,7 +345,7 @@ def adjust_tempo():
                 ["python", "fx_send.py", "--tempo", str(new_tempo)],
                 stderr=subprocess.STDOUT,
             )
-            print(output)
+            # print(output)
         time.sleep(0.500)
         return str(current_tempo)  # Return the updated tempo
 
@@ -384,11 +392,11 @@ def search_songs(query):
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
-    # print("we're in serach")
+    # # print("we're in serach")
     if request.method == "POST":
         query = request.form["query"]
         search_results = search_songs(query)
-        # print("search results :" + str(search_results))
+        # # print("search results :" + str(search_results))
         if search_results:
             return render_template(
                 "search_results.html", query=query, results=search_results
@@ -402,21 +410,21 @@ def search():
 @app.route("/search/query=<query>", methods=["GET", "POST"])
 def bbsearch(query):
     search_results = search_songs(query)
-    # print("search query results :" + str(search_results))
+    # # print("search query results :" + str(search_results))
     return render_template("search_results.html", query=query, results=search_results)
 
 
 @app.route("/bbmatch/query=<query>", methods=["GET", "POST"])
 def bbmatch_results(query):
     if request.method == "GET":
-        # print("bbmatch query: " + query)
+        # # print("bbmatch query: " + query)
         search_value = query
         if search_value is None or search_value.strip() == "":
-            # print("escaped at if")
+            # # print("escaped at if")
             return render_template("search.html")
 
         encoded_search_value = quote(search_value)
-        # print("encoded: " + encoded_search_value)
+        # # print("encoded: " + encoded_search_value)
 
         url = f"https://songmatcher.singularsound.com/?q={encoded_search_value}"
         response = requests.get(url)
@@ -441,7 +449,7 @@ def bbmatch_results(query):
                 "genre": genre,
             }
             results.append(result)
-        # print("moving to search results 2")
+        # # print("moving to search results 2")
         return render_template("search_results2.html", query=query, results=results)
 
     return redirect("/search/query=" + query)
@@ -450,7 +458,7 @@ def bbmatch_results(query):
 @app.route("/submit", methods=["POST"])
 def submit():
     global current_tempo, outport, port_name
-    # print("submit route")
+    # # print("submit route")
 
     output = mido.open_output(outport)
     output.close()
@@ -459,7 +467,7 @@ def submit():
         genre_number = request.form.get("genre_number")
         song_number = request.form.get("song_number")
         bpm = request.form.get("bpm")
-        print("bpm in send to bb:", bpm)
+        # print("bpm in send to bb:", bpm)
 
         if not genre_number or not song_number:
             raise ValueError("Genre number or song number is missing.")
@@ -469,22 +477,30 @@ def submit():
         genre_number = str(int(genre_number) - 1)
         song_number = str(int(song_number) - 1)
         # print(f"genre_number: {genre_number}, song_number: {song_number}")
+        cc0_val = 0
+        cc0_val = str(int(cc0_val))
+        if int(genre_number) > 127:
+            cc0_val = 1
+            cc0_val = str(int(cc0_val))
+            genre_number = str(int(genre_number) - 128)
+            
+        # print("submit midi values", cc0_val, genre_number, song_number)
 
         output = subprocess.check_output(
-            ["python", "set_bb.py", "0", genre_number, song_number],
+            ["python", "set_bb.py", cc0_val, genre_number, song_number],
             stderr=subprocess.STDOUT,
         )
         if bpm is not None:
-            print("bpm needs to be set for song")
+            # print("bpm needs to be set for song")
             # Variables for tempo calculation
             clock_ticks = 0
             start_time = time.time()
 
             current_tempo = None if bpm == "null" else bpm
-            print("current tempo is", current_tempo, "bpm is", bpm)
+            # print("current tempo is", current_tempo, "bpm is", bpm)
             # Open the MIDI input
             if current_tempo is not None:
-                # print("tempo has a value of", current_tempo)
+                # # print("tempo has a value of", current_tempo)
                 time.sleep(0.500)
                 with mido.open_output(outport) as port_out:
                     # Calculate the MSB and LSB values for the new tempo
@@ -492,7 +508,7 @@ def submit():
                     nrpn_lsb = int(current_tempo) % 128
                     tempo_msb = nrpn_msb
                     tempo_lsb = nrpn_lsb
-                    print("msb", tempo_msb, "lsb", tempo_lsb)
+                    # print("msb", tempo_msb, "lsb", tempo_lsb)
                     port_out.send(
                         mido.Message("control_change", control=106, value=tempo_msb)
                     )
@@ -516,7 +532,7 @@ def submit():
                                 # Read tempo only if it has changed
                                 if rounded_tempo != current_tempo:
                                     current_tempo = rounded_tempo
-                                    # print(f"Tempo: {current_tempo} BPM")
+                                    # # print(f"Tempo: {current_tempo} BPM")
                                     # Exit the loop after reading the tempo
                                     break
                                 # Reset timing variables
@@ -525,7 +541,7 @@ def submit():
                 magic()
         return redirect(url_for("index"))
     except Exception as e:
-        # print("Error:", str(e))
+        # # print("Error:", str(e))
         return "Error submitting the song."
 
 
@@ -588,7 +604,7 @@ def send_midi():
     message = Message(
         "control_change", control=cc_number, value=cc_value, channel=channel
     )
-    # print(message)
+    # # print(message)
     output.send(message)
 
     return "MIDI command sent successfully."
