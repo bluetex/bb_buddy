@@ -24,12 +24,14 @@
 <body>
     <h1>Chart Finder - Results</h1>
 
-    <h2>NJamp Links</h2>
-	<ul>
+
     <div class="accordion">
+		{{ njamp_header|safe }}	    
+		<ul>
         {{ njamp_links|safe }}
-    </div>
-	</ul>
+		</ul>
+	</div>
+	
 <hr>
     <h2>Ultimate Guitar Links</h2>
     <div class="accordion">

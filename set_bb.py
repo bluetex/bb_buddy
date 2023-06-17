@@ -7,7 +7,7 @@ output = mido.open_output(outport)
 
 # Check if the desired CC-0, CC-32, and program change values are provided as command line arguments
 if len(sys.argv) < 4:
-    print("Usage: python set_bb.py <CC-0 value> <CC-32 value> <program change value>")
+    print("Usage: this script needs to be called from the app")
     sys.exit(1)
 
 # Extract the desired CC-0, CC-32, and program change values from command line arguments

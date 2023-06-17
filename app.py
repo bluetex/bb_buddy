@@ -122,15 +122,15 @@ def index():
             next(reader)  # Skip the header row
             drumset_names = [row[1] for row in reader]
             drumset_value = drumset_names.index(selected_drumset) + 2
-        print(drumset_value)
+        #print(drumset_value)
 
         # Send the drumset value to the MIDI device
         with mido.open_output(outport) as port:
             message = mido.Message('control_change', control=116, value=drumset_value)
-            print('Received MIDI message:', request.form)
-            print('Sending MIDI message:', message)
+            #print('Received MIDI message:', request.form)
+            #print('Sending MIDI message:', message)
             port.send(message)
-        print('MIDI message sent')
+        #print('MIDI message sent')
 
     with open(drumset_csv, 'r') as file:
         reader = csv.reader(file)
@@ -185,7 +185,7 @@ def index():
 def send_to_bb():
     global current_tempo, port_name
 
-    print("entering send_to_bb")
+    #print("entering send_to_bb")
     genre = request.form["genre"]
     song = request.form["song"]
     if song:    
@@ -255,12 +255,16 @@ def magic():
 
 @app.route("/set_tempo", methods=["POST"])
 def set_tempo():
-    # print("set_tempo route")
+    #print("set_tempo route")
     global current_tempo, nrpn_msb, nrpn_lsb, tempo_msb, tempo_lsb, outport
 
     new_tempo = int(request.form["new_tempo"])
     # print("new tempo", new_tempo)
-
+    new_tempo = max(40, min(new_tempo, 300))
+    if new_tempo < 40: 
+        new_tempo = 40
+    if new_tempo > 300: 
+        new_tempo = 300
     output = mido.open_output(outport)
     output.close()
 
@@ -281,11 +285,12 @@ def set_tempo():
 
     # Update the current tempo
     current_tempo = new_tempo
-    output = subprocess.check_output(
-        ["python", "fx_send.py", "--tempo", str(new_tempo)],
-        stderr=subprocess.STDOUT,
-    )
-    # print(output)
+    if bluetex: 
+        output = subprocess.check_output(
+            ["python", "fx_send.py", "--tempo", str(new_tempo)],
+            stderr=subprocess.STDOUT,
+        )
+        print(output)
 
     return str(current_tempo)  # Return the updated tempo
 
@@ -293,7 +298,7 @@ def set_tempo():
 @app.route("/adjust_tempo", methods=["POST"])
 def adjust_tempo():
     global current_tempo, nrpn_msb, nrpn_lsb, tempo_msb, tempo_lsb, outport
-    print("adjust_tempo route. Current tempo is ", current_tempo)
+    #print("adjust_tempo route. Current tempo is ", current_tempo)
     adjustment = int(request.form["adjustment"])
 
     output = mido.open_output(outport)
@@ -304,10 +309,13 @@ def adjust_tempo():
     try:
         # Apply the adjustment to the current tempo
         new_tempo = current_tempo + adjustment
-        print("new tempo", new_tempo)
+        #print("new tempo", new_tempo)
         # Ensure the new tempo is within the valid range
         new_tempo = max(40, min(new_tempo, 300))
-
+        if new_tempo < 40: 
+            new_tempo = 40
+        if new_tempo > 300: 
+            new_tempo = 300
         # Calculate the MSB and LSB values for the new tempo
         nrpn_msb = new_tempo // 128
         nrpn_lsb = new_tempo % 128
@@ -324,11 +332,12 @@ def adjust_tempo():
 
         # Update the current tempo
         current_tempo = new_tempo
-        output = subprocess.check_output(
-            ["python", "fx_send.py", "--tempo", str(new_tempo)],
-            stderr=subprocess.STDOUT,
-        )
-        # print(output)
+        if bluetex: 
+            output = subprocess.check_output(
+                ["python", "fx_send.py", "--tempo", str(new_tempo)],
+                stderr=subprocess.STDOUT,
+            )
+            print(output)
         time.sleep(0.500)
         return str(current_tempo)  # Return the updated tempo
 
@@ -592,28 +601,31 @@ def chart_search():
 
 def search_charts(query):
     num_results = 30
-
-    njamp_query = urllib.parse.quote(query)
-    njamp_url = f'https://njamp.us/search/{njamp_query}'
-    njamp_response = requests.get(njamp_url)
-    njamp_paths = []
-
-    if njamp_response.status_code == 200:
-        for item in njamp_response.json():
-            njamp_paths.append(urllib.parse.quote(item['path']))
-
-    njamp_header = "<h3>NJamp Links:</h3><ul>"
     njamp_links = ""
+    njamp_header = ""
+    
+    if bluetex:
+        njamp_query = urllib.parse.quote(query)
+        njamp_url = f'https://njamp.us/search/{njamp_query}'
+        njamp_response = requests.get(njamp_url)
+        njamp_paths = []
 
-    if len(njamp_paths) > 0:
-        for path in njamp_paths:
-            pluspath = urllib.parse.unquote_plus(path)
-            pluspath = pluspath.split('/')[2].split('.pdf')[0]
-            njamp_url = f'https://njamp.us/{path}'
-            njamp_display = f'{pluspath}'
-            njamp_links += f"<a href='{njamp_url}'>{njamp_display}</a><br>"
-    else:
-        njamp_links = f"No results found for '{query}' on NJamp."
+        if njamp_response.status_code == 200:
+            for item in njamp_response.json():
+                njamp_paths.append(urllib.parse.quote(item['path']))
+
+        njamp_header = "<h2>NJamp Links:</h2>"
+        
+
+        if len(njamp_paths) > 0:
+            for path in njamp_paths:
+                pluspath = urllib.parse.unquote_plus(path)
+                pluspath = pluspath.split('/')[2].split('.pdf')[0]
+                njamp_url = f'https://njamp.us/{path}'
+                njamp_display = f'{pluspath}'
+                njamp_links += f"<a href='{njamp_url}'>{njamp_display}</a><br>"
+        else:
+            njamp_links = f"No results found for '{query}' on NJamp."
 
     search_string = '+'.join(query.split())
     url = f"https://www.ultimate-guitar.com/search.php?title={search_string}&rating%5B0%5D=4&rating%5B1%5D=5&page=1&order=myweight&type=300"
@@ -645,7 +657,7 @@ def search_charts(query):
             chord_tabs_str += f"<a href='{tab}'>{tab}</a><br>"
         chord_tabs_str += "</ul>"
 
-    return render_template('result.html', njamp_links=njamp_links, ug_links=chord_tabs_str)
+    return render_template('result.html', njamp_links=njamp_links, njamp_header=njamp_header, ug_links=chord_tabs_str)
 
 
 if __name__ == "__main__":
