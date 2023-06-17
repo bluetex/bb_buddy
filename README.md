@@ -1,8 +1,29 @@
 # bb_buddy
-BeatBuddy Buddy Application to push collection info to device.
+#### BeatBuddy Buddy Application to push collection info to device.
 
+## Requirements: 
+1. BeatBuddy with Midi Cable
+2. Audio/Midi interface
+3. Python3 
 
-Features: 
+## Install:
+1. Download the zip file under tags/releases
+2. Unzip it to your computer
+3. cd into your unzipped directory to find the requirements.txt
+4. run pip install -r requirements.txt
+5. run python ./start.py
+
+this will open a webpage for configuration
+
+## Configuration:
+1. on the config page (http://localhost:8000/) you'll be prompted for 3 values. 
+  - Midi Interface Input 
+  - Midi Interface Output
+  - Home Directory of your beatbuddy collection (the folder on your computer will contain Songs, Drumsets etc, if you don't have one of these you'll use BB Manager to save your project locally on your compuer)
+2. click the submit and you'll be redirected to http://localhost:5000
+  - NOTE: if you don't allow access to ports on your computer, you may need to open both of these ports. It is possible to access the webpage via your computer's IP if you allow access from off your computer to a local webserver. 
+
+## Features: 
 1. quick access view list (clickable) of all folders on your current sync to the beatbuddy sd card.  (works off the local pc side of that)
 2. search access to the local collection, and if not found searches the online "song match" website
 3. songs sent to beatbuddy will always display the genre/song pushed and the tempo (or current approximation)
@@ -18,9 +39,3 @@ Features:
  * if the song was songmatched from the external site, the tempo is also sent to BB
 9. Valid config setup - if the app polls the interface and path listed and finds an invalid config, you'll be pushed to the setup page
  * if a valid config is detected, we move immediately to the control page.
-
-Other options
-1. bluetex option: syncs the tempo of the current song to the FX rack of my Midas MR18 digital delay
-2. can be accessed (with minimal config) from any device on the same network as the one running the app
- * the computer running the app must be the one physically connected to the BB
- * must be running python3
