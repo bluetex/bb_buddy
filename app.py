@@ -146,28 +146,29 @@ def index():
         drumset_names=drumset_names,
     )
 
-@app.route('/get_json')
-def get_json():
-    # Read the JSON file
-    with open('data.json') as file:
-        data = json.load(file)
-    return jsonify(data)
+# zombie
+# @app.route('/get_json')
+# def get_json():
+    # # Read the JSON file
+    # with open('data.json') as file:
+        # data = json.load(file)
+    # return jsonify(data)
 
-
-@app.route("/select_song", methods=["POST"])
-def select_song():
-    genre_name = request.form["genre"]
-    genre_data = read_genre_data(f"{homedir_songs}/config.csv")
-    genre_code = None
-    for code, name in genre_data.items():
-        if name.strip() == genre_name:
-            genre_code = code
-            break
-    if genre_code is None:
-        return "Genre code not found."
-    genre_config_path = f"{homedir_songs}/{genre_code}/config.csv"
-    song_names = read_song_names(genre_config_path)
-    return render_template("select_song.html", genre=genre_name, song_names=song_names)
+# zombie
+# @app.route("/select_song", methods=["POST"])
+# def select_song():
+    # genre_name = request.form["genre"]
+    # genre_data = read_genre_data(f"{homedir_songs}/config.csv")
+    # genre_code = None
+    # for code, name in genre_data.items():
+        # if name.strip() == genre_name:
+            # genre_code = code
+            # break
+    # if genre_code is None:
+        # return "Genre code not found."
+    # genre_config_path = f"{homedir_songs}/{genre_code}/config.csv"
+    # song_names = read_song_names(genre_config_path)
+    # return render_template("select_song.html", genre=genre_name, song_names=song_names)
 
 
 # @app.route("/results", methods=["POST"])
@@ -183,53 +184,54 @@ def select_song():
 @app.route("/send_to_bb", methods=["POST"])
 def send_to_bb():
     global current_tempo, port_name
-    # print("entering send_to_bb")
+
+    print("entering send_to_bb")
     genre = request.form["genre"]
     song = request.form["song"]
+    if song:    
+        genre_number = genre.split(".")[0].strip()
+        song_number = song.split(".")[0].strip()
+        genre_number = str(int(genre_number) - 1)
+        song_number = str(int(song_number) - 1)
 
-    genre_number = genre.split(".")[0].strip()
-    song_number = song.split(".")[0].strip()
-    genre_number = str(int(genre_number) - 1)
-    song_number = str(int(song_number) - 1)
+        try:
+            output = subprocess.check_output(
+                ["python", "set_bb.py", "0", genre_number, song_number],
+                stderr=subprocess.STDOUT,
+            )
 
-    try:
-        output = subprocess.check_output(
-            ["python", "set_bb.py", "0", genre_number, song_number],
-            stderr=subprocess.STDOUT,
-        )
+            # Variables for tempo calculation
+            clock_ticks = 0
+            start_time = time.time()
+            # current_tempo = None
 
-        # Variables for tempo calculation
-        clock_ticks = 0
-        start_time = time.time()
-        # current_tempo = None
+            # Open the MIDI input
+            with mido.open_input(port_name) as port:
+                for message in port:
+                    if message.type == "clock":
+                        clock_ticks += 1
 
-        # Open the MIDI input
-        with mido.open_input(port_name) as port:
-            for message in port:
-                if message.type == "clock":
-                    clock_ticks += 1
+                        # Calculate tempo every quarter note (24 MIDI clock ticks)
+                        if clock_ticks % 24 == 0:
+                            elapsed_time = time.time() - start_time
+                            tempo = 60.0 / elapsed_time
+                            rounded_tempo = int(tempo) + 1
 
-                    # Calculate tempo every quarter note (24 MIDI clock ticks)
-                    if clock_ticks % 24 == 0:
-                        elapsed_time = time.time() - start_time
-                        tempo = 60.0 / elapsed_time
-                        rounded_tempo = int(tempo) + 1
-
-                        # Read tempo only if it has changed
-                        if rounded_tempo != current_tempo:
-                            current_tempo = rounded_tempo
-                            # print(f"Tempo: {current_tempo} BPM")
-                            # Exit the loop after reading the tempo
-                            break
-                        # Reset timing variables
-                        start_time = time.time()
-            # return str(current_tempo)
-        magic()
-        return redirect(url_for("index"))
-    except subprocess.CalledProcessError as e:
-        # print("Error executing set_bb.py:", e.output)
-        return "Error sending data to Beat Buddy."
-
+                            # Read tempo only if it has changed
+                            if rounded_tempo != current_tempo:
+                                current_tempo = rounded_tempo
+                                # print(f"Tempo: {current_tempo} BPM")
+                                # Exit the loop after reading the tempo
+                                break
+                            # Reset timing variables
+                            start_time = time.time()
+                # return str(current_tempo)
+            magic()
+            return redirect(url_for("index"))
+        except subprocess.CalledProcessError as e:
+            # print("Error executing set_bb.py:", e.output)
+            return "Error sending data to Beat Buddy."
+    return redirect(url_for("index"))    
 
 def magic():
     global current_tempo
@@ -589,7 +591,7 @@ def chart_search():
     return search_charts(query)
 
 def search_charts(query):
-    num_results = 10
+    num_results = 30
 
     njamp_query = urllib.parse.quote(query)
     njamp_url = f'https://njamp.us/search/{njamp_query}'
@@ -600,19 +602,22 @@ def search_charts(query):
         for item in njamp_response.json():
             njamp_paths.append(urllib.parse.quote(item['path']))
 
-    njamp_header = "<h3>NJamp Links:</h3>"
+    njamp_header = "<h3>NJamp Links:</h3><ul>"
     njamp_links = ""
 
     if len(njamp_paths) > 0:
         for path in njamp_paths:
+            pluspath = urllib.parse.unquote_plus(path)
+            pluspath = pluspath.split('/')[2].split('.pdf')[0]
             njamp_url = f'https://njamp.us/{path}'
-            njamp_links += f"<a href='{njamp_url}'>{njamp_url}</a><br>"
+            njamp_display = f'{pluspath}'
+            njamp_links += f"<a href='{njamp_url}'>{njamp_display}</a><br>"
     else:
         njamp_links = f"No results found for '{query}' on NJamp."
 
     search_string = '+'.join(query.split())
     url = f"https://www.ultimate-guitar.com/search.php?title={search_string}&rating%5B0%5D=4&rating%5B1%5D=5&page=1&order=myweight&type=300"
-    ug_header = "<h3>Ultimate Guitar Links:</h3>"
+    ug_header = "</ul><h3>Ultimate Guitar Links:</h3>"
 
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
@@ -636,15 +641,12 @@ def search_charts(query):
 
     if chord_tabs:
         chord_tabs_str = "<ul>"
-        for tab in chord_tabs[:10]:
-            chord_tabs_str += f"<li><a href='{tab}'>{tab}</a></li>"
+        for tab in chord_tabs[:30]:
+            chord_tabs_str += f"<a href='{tab}'>{tab}</a><br>"
         chord_tabs_str += "</ul>"
 
     return render_template('result.html', njamp_links=njamp_links, ug_links=chord_tabs_str)
-# # Close the MIDI output port when the app is shut down
-# @app.teardown_appcontext
-# def close_midi_port(exception=None):
-# output.close()
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
