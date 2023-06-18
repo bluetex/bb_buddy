@@ -458,7 +458,7 @@ def bbmatch_results(query):
 @app.route("/submit", methods=["POST"])
 def submit():
     global current_tempo, outport, port_name
-    # # print("submit route")
+    print("submit route")
 
     output = mido.open_output(outport)
     output.close()
@@ -467,7 +467,7 @@ def submit():
         genre_number = request.form.get("genre_number")
         song_number = request.form.get("song_number")
         bpm = request.form.get("bpm")
-        # print("bpm in send to bb:", bpm)
+        print("bpm in send to bb:", bpm)
 
         if not genre_number or not song_number:
             raise ValueError("Genre number or song number is missing.")
@@ -491,16 +491,16 @@ def submit():
             stderr=subprocess.STDOUT,
         )
         if bpm is not None:
-            # print("bpm needs to be set for song")
+            print("bpm needs to be set for song")
             # Variables for tempo calculation
             clock_ticks = 0
             start_time = time.time()
 
             current_tempo = None if bpm == "null" else bpm
-            # print("current tempo is", current_tempo, "bpm is", bpm)
+            print("current tempo is", current_tempo, "bpm is", bpm)
             # Open the MIDI input
             if current_tempo is not None:
-                # # print("tempo has a value of", current_tempo)
+                print("tempo has a value of", current_tempo)
                 time.sleep(0.500)
                 with mido.open_output(outport) as port_out:
                     # Calculate the MSB and LSB values for the new tempo

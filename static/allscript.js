@@ -518,6 +518,7 @@ function createSetlistAccordions(setlist) {
 // Function to update the search value in localStorage
 function updateSearchValue(value) {
   localStorage.setItem('searchValue', value);
+  localStorage.removeItem('bpm');
 }
 
 // Function to save the search value to localStorage before form submission
