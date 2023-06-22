@@ -115,26 +115,33 @@ def index():
 
     if request.method == 'POST':
         selected_drumset = request.form['drumset']
-
+        cc0_val = 0
         # Convert drumset name to a value between 1 and 127
         with open(drumset_csv, 'r') as file:
             reader = csv.reader(file)
-            next(reader)  # Skip the header row
+            #next(reader)  # Skip the header row
             drumset_names = [row[1] for row in reader]
-            drumset_value = drumset_names.index(selected_drumset) + 2
+            drumset_value = drumset_names.index(selected_drumset) + 1
+            if int(drumset_value) > 127:
+                drumset_value = int(drumset_value) - 127
+                cc0_val = 1
+            
         ## print(drumset_value)
 
         # Send the drumset value to the MIDI device
         with mido.open_output(outport) as port:
+            message = mido.Message('control_change', control=0, value=cc0_val)
+            port.send(message)
+            print('Sending cc0 message', message)
             message = mido.Message('control_change', control=116, value=drumset_value)
             ## print('Received MIDI message:', request.form)
-            ## print('Sending MIDI message:', message)
+            print('Sending MIDI message:', message)
             port.send(message)
         ## print('MIDI message sent')
 
     with open(drumset_csv, 'r') as file:
         reader = csv.reader(file)
-        next(reader)  # Skip the header row
+        #next(reader)  # Skip the header row
         drumset_names = [row[1] for row in reader]
 
     return render_template(
@@ -200,7 +207,7 @@ def send_to_bb():
             cc0_val = 1
             cc0_val = str(int(cc0_val))
             genre_number = str(int(genre_number) - 128)
-        # print("send to bb midi values", cc0_val, genre_number, song_number)        
+        print("send to bb midi values", cc0_val, genre_number, song_number)        
 
         try:
             output = subprocess.check_output(
@@ -484,7 +491,7 @@ def submit():
             cc0_val = str(int(cc0_val))
             genre_number = str(int(genre_number) - 128)
             
-        # print("submit midi values", cc0_val, genre_number, song_number)
+        print("submit midi values", cc0_val, genre_number, song_number)
 
         output = subprocess.check_output(
             ["python", "set_bb.py", cc0_val, genre_number, song_number],
