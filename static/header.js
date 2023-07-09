@@ -21,6 +21,11 @@
   form.appendChild(songInput);
 
   document.body.appendChild(form);
+  // Check if 'setlist' exists in localStorage
+  if (!localStorage.getItem('setlist')) {
+    // If 'setlist' doesn't exist, initialize it as an empty array
+    localStorage.setItem('setlist', JSON.stringify([]));
+  }
 
   // Display the success message
   var successMessage = document.getElementById("successMessage");
