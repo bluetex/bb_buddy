@@ -374,7 +374,7 @@ def search_songs(query):
 
             if os.path.exists(genre_folder_path):
                 config_file_path = os.path.join(genre_folder_path, "config.csv")
-                with open(config_file_path, "r") as config_file:
+                with open(config_file_path, "r", encoding='utf-8') as config_file:
                     reader2 = list(csv.reader(config_file))
                     for row2 in reader2:
                         if len(row2) > 1:  # Skip empty rows
