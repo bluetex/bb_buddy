@@ -86,12 +86,14 @@
         // Store the updated setlist in local storage
         localStorage.setItem("setlist", JSON.stringify(setlist));
 
-        var setListAdded = document.getElementById("setListAdded");
-        setListAdded.style.display = "block";
-        delay(100);
-        console.log("waited 100ms");
-        window.location.href = "/";
-            // Update the setlist display
+		var setListAdded = document.getElementById("setListAdded");
+		setListAdded.style.display = "inline-block";
+
+		setTimeout(function() {
+		  console.log("Waited 1000ms");
+		  window.location.href = "/";
+		}, 1000);
+
 
         //document.addEventListener("DOMContentLoaded", function() {
         //  displaySetlist();

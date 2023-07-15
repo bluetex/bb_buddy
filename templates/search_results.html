@@ -22,16 +22,13 @@
 	  <button class="button-blue" id="sendToSetlistButton" onclick="updateSetlist();">
         Add to Setlist
       </button>
-      <div id="setListAdded" style="display: none;">
-        Added to Setlist
-      </div>
     </div>
 
     </div>
 
 
 
-    <h2>Please choose song for your search: "{{ query }}"  <div id="successMessage" style="display: none;"> - Song sent to BeatBuddy! </div></h2>
+    <h2>Please choose song for your search: "{{ query }}"  <div id="successMessage" style="display: none;"> - Song sent to BeatBuddy! </div><div id="setListAdded" style="display: none;"> - Sent Song to Setlist!</div></h2>
     <div>
       <form id="bbForm" action="/submit" method="POST">
         {% for result in results %}
