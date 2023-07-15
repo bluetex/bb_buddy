@@ -318,7 +318,7 @@ def adjust_tempo():
 
     output = mido.open_output(outport)
     # debounce
-    time.sleep(0.250)
+    time.sleep(0.1)
     output.close()
 
     try:
@@ -353,7 +353,7 @@ def adjust_tempo():
                 stderr=subprocess.STDOUT,
             )
             # print(output)
-        time.sleep(0.500)
+        time.sleep(0.1)
         return str(current_tempo)  # Return the updated tempo
 
     except Exception as e:
@@ -469,7 +469,7 @@ def submit():
 
     output = mido.open_output(outport)
     output.close()
-    time.sleep(0.500)
+    time.sleep(0.1)
     try:
         genre_number = request.form.get("genre_number")
         song_number = request.form.get("song_number")
@@ -508,7 +508,7 @@ def submit():
             # Open the MIDI input
             if current_tempo is not None:
                 print("tempo has a value of", current_tempo)
-                time.sleep(0.500)
+                time.sleep(0.1)
                 with mido.open_output(outport) as port_out:
                     # Calculate the MSB and LSB values for the new tempo
                     nrpn_msb = int(current_tempo) // 128
@@ -596,7 +596,7 @@ def send_midi():
             "control_change", control=cc_number, value=cc_value, channel=channel
         )
         output.send(message)
-        time.sleep(0.500)
+        time.sleep(0.1)
         cc_value = 0
     elif command == "next":
         cc_number = 113
@@ -605,7 +605,7 @@ def send_midi():
             "control_change", control=cc_number, value=cc_value, channel=channel
         )
         output.send(message)
-        time.sleep(0.500)
+        time.sleep(0.1)
         cc_value = 0
 
     message = Message(
