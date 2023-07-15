@@ -29,7 +29,7 @@
 
   // Display the success message
   var successMessage = document.getElementById("successMessage");
-  successMessage.style.display = "block";
+  successMessage.style.display = "inline-block";
   // Store the values in localStorage
 	localStorage.setItem("currentGenre", genreInput.value);
 	localStorage.setItem("currentSong", songInput.value);
@@ -70,6 +70,7 @@
         console.log("Selected genre:", selectedGenre);
         console.log("Selected song:", selectedSong);
 
+
         // Create an object for the new song
         var songObject = {
             genre: selectedGenre,
@@ -87,8 +88,8 @@
 
         var setListAdded = document.getElementById("setListAdded");
         setListAdded.style.display = "block";
-        delay(1000);
-        console.log("waited one second");
+        delay(100);
+        console.log("waited 100ms");
         window.location.href = "/";
             // Update the setlist display
 

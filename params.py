@@ -1,5 +1,5 @@
 import mido
-bluetex = None
+bluetex = "true"
 port_name = 'AudioBox iTwo MIDI In 3'
 outport = 'AudioBox iTwo MIDI Out 4'
 homedir_base = r'D:/beatbuddy/Complete Collection/Premium Library Complete Collection 2023'

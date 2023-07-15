@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 
   </head>
-  <body>
+<body style="padding-top: 0px; padding-left: 7px">
     <div class="header">
       <span id="Collection Select"><a href="/" color="red">Collection</a></span> |
       <span id="selectedGenreHeader"></span> |
@@ -69,39 +69,7 @@
         return new Promise(resolve => setTimeout(resolve, time));
     }
 
-    function updateSetlist() {
-        // Get the selected genre and song
-        var selectedGenre = document.getElementById("selectedGenreHeader").textContent;
-        var selectedSong = document.getElementById("selectedSongHeader").textContent;
-        console.log("Selected genre:", selectedGenre);
-        console.log("Selected song:", selectedSong);
 
-        // Create an object for the new song
-        var songObject = {
-            genre: selectedGenre,
-            song: selectedSong
-        };
-
-        // Retrieve the existing setlist from local storage or create an empty array
-        var setlist = JSON.parse(localStorage.getItem("setlist")) || [];
-
-        // Add the new song to the setlist
-        setlist.push(songObject);
-
-        // Store the updated setlist in local storage
-        localStorage.setItem("setlist", JSON.stringify(setlist));
-
-        var setListAdded = document.getElementById("setListAdded");
-        setListAdded.style.display = "block";
-        delay(1000);
-        console.log("waited one second");
-        location.reload(); 
-            // Update the setlist display
-
-        //document.addEventListener("DOMContentLoaded", function() {
-        //  displaySetlist();
-        //    });
-    }
     </script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

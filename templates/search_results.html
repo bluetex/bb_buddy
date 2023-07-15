@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 
   </head>
-  <body>
+<body style="padding-top: 0px; padding-left: 7px">
     <div class="header">
       <span id="Collection Select"><a href="/">Collection</a></span> |
       <span id="selectedGenreHeader"></span> |
@@ -22,9 +22,6 @@
 	  <button class="button-blue" id="sendToSetlistButton" onclick="updateSetlist();">
         Add to Setlist
       </button>
-      <div id="successMessage" style="display: none;">
-        Data sent to Beat Buddy successfully!
-      </div>
       <div id="setListAdded" style="display: none;">
         Added to Setlist
       </div>
@@ -34,7 +31,7 @@
 
 
 
-    <h2>Please choose song for your search: "{{ query }}"</h2>
+    <h2>Please choose song for your search: "{{ query }}"  <div id="successMessage" style="display: none;"> - Song sent to BeatBuddy! </div></h2>
     <div>
       <form id="bbForm" action="/submit" method="POST">
         {% for result in results %}
@@ -137,6 +134,8 @@
           form.appendChild(songInput);
           form.appendChild(bpmInput);
 
+		  var successMessage = document.getElementById("successMessage");
+		  successMessage.style.display = "inline-block";
 
           form.submit();
       }

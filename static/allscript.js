@@ -248,6 +248,9 @@ function createSetlistAccordions(setlist) {
         var songInput = document.getElementById("songInput");
         songInput.value = song;
 
+		var searchValue = document.getElementById("searchValue");
+        searchInput.value = searchValue;
+
         updateSetlist();
         displaySetlist();
     });

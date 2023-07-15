@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 
 </head>
-<body style="padding-top: 0px;">
+<body style="padding-top: 0px; padding-left: 7px">
     <div class="header">
       <span id="Collection Select"><a href="/" color="red">Collection</a></span> |
       <span id="selectedGenreHeader"></span> |
@@ -18,15 +18,13 @@
       <button class="button-blue" id="sendToSetlistButton" onclick="updateSetlist();">
         Add to Setlist
       </button>
-      <div id="successMessage" style="display: none;">
-        Song sent to BeatBuddy!
-      </div>
+
       <div id="setListAdded" style="display: none;">
         Sent Song to Setlist!
       </div>
     </div>
 
-    <h2>BeatBuddy Collection</h2>
+    <h2>BeatBuddy Collection  <div id="successMessage" style="display: none;"> - Song sent to BeatBuddy! </div></h2>
     <hr class="new2" />
 	<div id="selected-song-container-id">
     <div class="selected-song-container">
@@ -61,10 +59,24 @@
 
       <div class="selected-song-accordion" id="selectedSongAccordion">
         <div>
-
+            
           <div id="midi-control-buttons">
 		    <h3>Song Controls</h3>
             <hr class="new2" />
+              <ul>
+				<h3>Search for Songs:</h3>
+				<form action="/search" method="POST" onsubmit="saveSearch()">
+				  <input
+					type="text"
+					id="search"
+					name="query"
+					placeholder="Enter your search query"
+					oninput="updateSearchValue(this.value)"
+				  />
+				  <input type="submit" value="Search" />
+				</form>
+				</ul>
+            <hr class="new2" />				
             <ul>
               Current Genre:
               <span id="displayValue1"></span>
@@ -132,20 +144,6 @@
             </ul>
             <hr class="new2" />
             <div>
-              <ul>
-				<h3>Search for Songs</h3>
-				<form action="/search" method="POST" onsubmit="saveSearch()">
-				  <input
-					type="text"
-					id="search"
-					name="query"
-					placeholder="Enter your search query"
-					oninput="updateSearchValue(this.value)"
-				  />
-				  <input type="submit" value="Search" />
-				</form>
-
-              </ul>
 			  <ul>
 		        <h3>Select a Drumset:</h3>
 				<form method="post" action="/">
@@ -179,7 +177,7 @@
         <input type="hidden" name="song" id="songInput" />
         <button type="submit">Send to BeatBuddy</button>
       </form>
-	  <form action="/" metho="POST" id="setlistForm">
+	  <form action="/" method="POST" id="setlistForm">
 		<input type="hidden" name="genre" id="genreInput" />
 		<input type="hidden" name="song"  id="songInput" />
 		<button type="submit">Add to SetList</button>
@@ -256,6 +254,14 @@
     var currentUrl = window.location.href;
     var url = currentUrl.replace(/\/$/, '') + '/chartsearch?query=' + encodeURIComponent(searchValue);
     searchLabel.innerHTML = "Find a chart for '<a href='" + url + "' target='_blank'>" + searchValue + "</a>'";
+  } else {
+    var searchLabel = document.getElementById('searchLabel');
+    var currentUrl = window.location.href;
+    var url = currentUrl.replace(/\/$/, '') + '/chartsearch?query=asdfjklz';
+    searchLabel.innerHTML = "<a href='" + url + "' target='_blank'>Open Chart Finder</a>";
   }
-</script>  </body>
+</script>  
+ 
+
+</body>
 </html>

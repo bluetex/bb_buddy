@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chart Finder - Results</title>
+    <title>Chart Finder</title>
     <style>
         h2 {
             margin-top: 20px;
@@ -14,29 +14,59 @@
             color: blue;
             text-decoration: underline;
         }
-		
-		</style>
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-		
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    </style>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <body>
+<body style="padding-top: 0px; padding-left: 7px">
+    <div class="header">
+      <span id="Collection Select"><a href="/" color="red">Collection</a></span> |
+      <span id="selectedGenreHeader"></span> |
+      <span id="selectedSongHeader"></span> |
+	  
+      <button class="button" id="sendToBBButton" onclick="sendToBeatBuddy()">
+        Send to BeatBuddy
+      </button>
+      <button class="button-blue" id="sendToSetlistButton" onclick="updateSetlist();">
+        Add to Setlist
+      </button>
+      <div id="successMessage" style="display: none;">
+        Song sent to BeatBuddy!
+      </div>
+      <div id="setListAdded" style="display: none;">
+        Sent Song to Setlist!
+      </div>
+    </div>
     <h1>Chart Finder - Results</h1>
 
-
+    <form id="searchForm" action="">
+        <ul><input type="text" id="searchInput" placeholder="Enter your search query">
+        <button type="submit">Search</button></ul>
+    </form>
+            <hr class="new2" />
     <div class="accordion">
-		{{ njamp_header|safe }}	    
-		<ul>
-        {{ njamp_links|safe }}
-		</ul>
-	</div>
-	
-<hr>
+        {{ njamp_header|safe }}
+        <ul>
+            {{ njamp_links|safe }}
+        </ul>
+    </div>
+
+    <hr>
+
     <h2>Ultimate Guitar Links</h2>
     <div class="accordion">
         {{ ug_links|safe }}
     </div>
-	
+
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var searchQuery = document.getElementById('searchInput').value;
+            var url = 'chartsearch?query=' + encodeURIComponent(searchQuery);
+            window.location.href = url;
+        });
+    </script>
 </body>
 </html>
