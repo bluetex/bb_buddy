@@ -5,6 +5,8 @@ on:
     
 jobs: 
   this is a job: 
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: a shell step
         shell: sh
