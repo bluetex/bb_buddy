@@ -1,0 +1,9 @@
+name: test me
+on:
+  workflow_dispatch:
+    branches: [ main ]
+    
+    
+    
+jobs: this is a job
+  
