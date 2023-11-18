@@ -4,7 +4,7 @@
 ## Requirements: 
 1. BeatBuddy with Midi Cable
 2. Audio/Midi interface
-3. Python3 (recommended 3.1.12 from the Python.org site)
+3. Python3 (recommended 3.12.x from the Python.org site)
 
 ## Install:
 1. Download the zip file under tags/releases
