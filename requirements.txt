@@ -3,4 +3,4 @@ Flask==2.3.2
 mido==1.2.10
 python_osc==1.8.1
 Requests==2.31.0
-python-rtmidi==1.5.1
+python-rtmidi==1.5.7
